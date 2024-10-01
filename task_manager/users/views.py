@@ -16,10 +16,15 @@ class CreateUsersView(View):
 
     def post(self, request):
         form = RegisterUserForm(request.POST)
+        print("22222222222")
+        #print(form)
+        print(form.is_valid())
+        print(form.errors)
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
-            user.save()
+            print('545454545')
+            user.save()        
         return render(request, 'login.html')
 
     

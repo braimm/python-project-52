@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container wrapper flex-grow-1">
+
+  <h1 class="my-4">
+    
+    Задачи
+
+  </h1>
+  
+<a class="btn btn-primary mb-3" href="/tasks/create/" role="button">Создать задачу</a>
+
+
+
+
+<div class="card mb-3">
+<div class="card-body bg-light">
+<form class="form-inline center" method="get">
+  <div class="mb-3"><label class="form-label" for="id_status">Статус</label><select name="status" class="form-select ml-2 mr-3" id="id_status">
+<option value="" selected>---------</option>
+
+<option value="1">статус2</option>
+
+</select></div>
+  <div class="mb-3"><label class="form-label" for="id_executor">Исполнитель</label><select name="executor" class="form-select mr-3 ml-2" id="id_executor">
+<option value="" selected>---------</option>
+
+<option value="1">Maksim Rubanets</option>
+
+<option value="2">test test</option>
+
+<option value="3">123 456</option>
+
+<option value="4">ben gurion</option>
+
+<option value="6">123 123</option>
+
+<option value="8">qwe asd</option>
+
+<option value="9">3 3</option>
+
+<option value="10">trtr trtr</option>
+
+<option value="11">pusik pusik</option>
+
+<option value="12">1 1</option>
+
+<option value="13">imya familiya</option>
+
+<option value="15">1231 1231</option>
+
+<option value="16">123 123</option>
+
+<option value="17">йцуйцу йцу</option>
+
+<option value="18">йцу йцу</option>
+
+<option value="19">qwe qwe</option>
+
+<option value="20">a1 b1</option>
+
+<option value="21">1111 222</option>
+
+</select></div>
+  <div class="mb-3"><label class="form-label" for="id_label">Метка</label><select name="label" class="form-select mr-3 ml-2" id="id_label">
+<option value="" selected>---------</option>
+
+<option value="1">метка2</option>
+
+</select></div>
+  <div class="mb-3"><div class="form-check"><input type="checkbox" name="self_tasks" class="form-check-input mr-3" id="id_self_tasks"><label class="form-check-label" for="id_self_tasks">Только свои задачи</label></div></div>
+    <input class="btn btn-primary" type="submit" value="Показать">
+</form>
+</div>
+</div>
+
+
+<table class="table table-striped">
+<thead>
+<tr>
+  <th>ID</th>
+  <th>Имя</th>
+  <th>Статус</th>
+  <th>Автор</th>
+  <th>Исполнитель</th>
+  <th>Дата создания</th>
+  <th></th>
+</tr>
+</thead>
+<tbody>
+
+  <tr>
+    <td>1</td>
+    <td>
+      <a href="/tasks/1/">задача</a>
+    </td>
+    <td>статус2</td>
+    <td>Maksim Rubanets</td>
+    <td>Maksim Rubanets</td>
+    <td>29.09.2024 13:42</td>
+    <td>
+      <a href="/tasks/1/update/">Изменить</a>
+      <br>
+      <a href="/tasks/1/delete/">Удалить</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>2</td>
+    <td>
+      <a href="/tasks/2/">sdgsd</a>
+    </td>
+    <td>статус2</td>
+    <td>Maksim Rubanets</td>
+    <td>123 123</td>
+    <td>30.09.2024 19:15</td>
+    <td>
+      <a href="/tasks/2/update/">Изменить</a>
+      <br>
+      <a href="/tasks/2/delete/">Удалить</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>5</td>
+    <td>
+      <a href="/tasks/5/">asd</a>
+    </td>
+    <td>статус2</td>
+    <td>qwe asd</td>
+    <td>1 1</td>
+    <td>02.10.2024 01:34</td>
+    <td>
+      <a href="/tasks/5/update/">Изменить</a>
+      <br>
+      <a href="/tasks/5/delete/">Удалить</a>
+    </td>
+  </tr>
+
+</tbody>
+</table>
+
+
+</div>
+
+{% endblock %}

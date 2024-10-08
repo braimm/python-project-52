@@ -18,7 +18,7 @@
       <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'users' %}">Пользователи</a>
+            <a class="nav-link" href="{% url 'list_users' %}">Пользователи</a>
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item">
@@ -40,16 +40,21 @@
         {% else %}
         <div class="d-flex">
           <a class="nav-link" href="{% url 'login' %}">Вход</a>
-          <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+          <a class="nav-link" href="{% url 'register_user' %}">Регистрация</a>
         </div>
         {% endif %}
         </ul>
     </div>
     </nav>
     
-    {% block content %}
-    {% endblock %}
-
+    <main class="container wrapper flex-grow-1">
+      <div class="mt-2">{% bootstrap_messages %}</div>
+    
+      {% block content %}
+      {% endblock %}
+    
+    </main>
+    
     <footer>
       <div class="container my-5 pt-4 border-top">
         <a target="_blank" href="https://ru.hexlet.io">Hexlet</a>

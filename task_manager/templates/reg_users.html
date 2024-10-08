@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container wrapper flex-grow-1">
     <h1 class="my-4">Регистрация</h1>    
-    <form action="{% url 'register' %}" method="post">
+    <form action="{% url 'register_user' %}" method="post">
         {% csrf_token %}
         <input type="hidden">
         <div class="mb-3">
@@ -39,5 +38,4 @@
         </div>
         <input class="btn btn-primary" type="submit" value="Зарегистрировать">
     </form>
-</div>
 {% endblock %}

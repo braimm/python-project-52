@@ -21,14 +21,14 @@ class LoginUserView(View):
             user = authenticate(request, username=cd['username'], password=cd['password'])
             if user and user.is_active:
                 login(request, user)
+                messages.success(request, 'Вы залогинены')
                 return HttpResponseRedirect(reverse('start_page'))
         return render(request, 'login.html')
 
 class LogoutUserView(View):
-    def get(self, request):
-        pass
     def post(self, request):
         logout(request)
+        messages.success(request, 'Вы разлогинены')
         return HttpResponseRedirect(reverse('login'))
 
 class StatusesView(View):

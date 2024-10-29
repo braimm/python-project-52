@@ -18,7 +18,7 @@ class ListUsersView(ListView):
     template_name = 'users_list.html'
     context_object_name = 'users'
 
-class CreateUsersView(View):
+class CreateUserView(View):
     
     def get(self, request):
         return render(request, 'reg_users.html')
@@ -31,15 +31,18 @@ class CreateUsersView(View):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
-        messages.success(request, 'Пользователь успешно зарегистрирован')
-        return render(request, 'login.html')
+            messages.success(request, 'Пользователь успешно зарегистрирован')
+            return render(request, 'login.html')
+        return render(request, 'reg_users.html')
 
-    
 
-class UpdateUserView(UpdateView):
-    def get(self, request, **kwargs):
-        return render(request, 'update_user.html')
-    
+class UpdateUserView(SuccessMessageMixin, UpdateView):
+    model = get_user_model()
+    form_class = RegisterUserForm
+    template_name = 'update_user.html'
+    #fields = ['first_name', 'last_name', 'username', 'password']
+    success_url = reverse_lazy("list_users")
+    success_message = 'Пользователь успешно изменен'
 
 class DeleteUserView(SuccessMessageMixin, DeleteView):
     model = get_user_model()

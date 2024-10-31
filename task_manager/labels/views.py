@@ -8,25 +8,27 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from task_manager.labels.models import Label
+from task_manager.labels.forms import CreateLabelForm
 
 # Create your views here.
 
 
-#path('statuses/', views.StatusesView.as_view(), name='statuses'),
-#path('labels/', views.LabelsView.as_view(), name='labels'),
-#path('tasks/', views.TasksView.as_view(), name='tasks'),
-
-
-class ListLabelsView(View):
-    def get(self, request):
-        return render(request, 'list_labels.html')
-    def post(self, request):
-        pass
+class ListLabelsView(ListView):
+    model = Label
+    template_name = 'list_labels.html'
+    context_object_name = 'labels'
 
 
 class CreateLabelView(View):
-    pass    
-
+    def get(self, request):
+        return render(request, 'create_label.html')
+    def post(self, request):
+        form = CreateLabelForm(request.POST)
+        form.save()
+        messages.success(request, 'Метка успешно создана')
+        return HttpResponseRedirect(reverse("list_labels"))
+        #return render(request, 'create_status.html')
 
 class UpdateLabelView(SuccessMessageMixin, UpdateView):
     pass

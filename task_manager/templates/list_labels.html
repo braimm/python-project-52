@@ -23,7 +23,7 @@
   <tr>
     <td>{{ label.id }}</td>
     <td>{{ label.name }}</td>
-    <td>{{ label.date_joined|date:"d.m.Y H:i" }}</td>
+    <td>{{ label.created_at|date:"d.m.Y H:i" }}</td>
     <td class="d-flex flex-column">
       <a href="{% url 'update_label' label.id %}" class="d-inline-block">Изменить</a>
       <a href="{% url 'delete_label' label.id %}" class="d-inline-block">Удалить</a>

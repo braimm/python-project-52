@@ -23,7 +23,7 @@
   <tr>
     <td>{{ status.id }}</td>
     <td>{{ status.name }}</td>
-    <td>{{ status.date_joined|date:"d.m.Y H:i" }}</td>
+    <td>{{ status.created_at|date:"d.m.Y H:i" }}</td>
     <td class="d-flex flex-column">
       <a href="{% url 'update_status' status.id %}" class="d-inline-block">Изменить</a>
       <a href="{% url 'delete_status' status.id %}" class="d-inline-block">Удалить</a>

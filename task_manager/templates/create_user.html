@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1 class="my-4">Регистрация</h1>    
-    <form action="{% url 'register_user' %}" method="post">
+    <form action="{% url 'create_user' %}" method="post">
         {% csrf_token %}
         <input type="hidden">
         <div class="mb-3">

@@ -13,7 +13,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 class ListTasksView(View):
     def get(self, request):
-        return render(request, 'tasks.html')
+        return render(request, 'list_tasks.html')
     def post(self, request):
         pass
 

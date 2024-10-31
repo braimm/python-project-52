@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="my-4">Создать статус </h1>    
+    <form action="{% url 'create_status' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden">
+        <div class="mb-3">
+            <label class="form-label" for="id_first_name">Имя</label>
+            <input type="text" name="first_name" maxlength="150" class="form-control" placeholder="Имя" required id="id_first_name">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Создать">
+    </form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+    <h1 class="my-4">Изменение пользователя</h1>    
+    <form method="post">
+        {% csrf_token %}        
+        <input type="hidden">
+        {% bootstrap_form form %}
+        <input class="btn btn-primary" type="submit" value="Изменить">
+    </form>
+{% endblock %}

@@ -12,16 +12,16 @@ from .forms import RegisterUserForm
 # Create your views here.
 #class ListUsersView(View):
 #    def get(self, request):
-#        return render(request, 'users_list.html')
+#        return render(request, 'list_users.html')
 class ListUsersView(ListView):
     model = get_user_model()
-    template_name = 'users_list.html'
+    template_name = 'list_users.html'
     context_object_name = 'users'
 
 class CreateUserView(View):
     
     def get(self, request):
-        return render(request, 'reg_users.html')
+        return render(request, 'create_user.html')
 
     def post(self, request):
         form = RegisterUserForm(request.POST)
@@ -33,7 +33,7 @@ class CreateUserView(View):
             user.save()
             messages.success(request, 'Пользователь успешно зарегистрирован')
             return render(request, 'login.html')
-        return render(request, 'reg_users.html')
+        return render(request, 'create_user.html')
 
 
 class UpdateUserView(SuccessMessageMixin, UpdateView):

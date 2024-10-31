@@ -19,7 +19,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 class ListLabelsView(View):
     def get(self, request):
-        return render(request, 'labels.html')
+        return render(request, 'list_labels.html')
     def post(self, request):
         pass
 

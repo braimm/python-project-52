@@ -22,7 +22,7 @@ from task_manager.users import views
 
 urlpatterns = [
     path('', views.ListUsersView.as_view(), name='list_users'),
-    path('create/', views.CreateUserView.as_view(), name='register_user'),
+    path('create/', views.CreateUserView.as_view(), name='create_user'),
     path('<int:pk>/delete/', views.DeleteUserView.as_view(), name='delete_user'),
     path('<int:pk>/update/', views.UpdateUserView.as_view(), name='update_user'),
 ]

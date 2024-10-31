@@ -22,7 +22,7 @@ from task_manager.statuses import views
 
 urlpatterns = [
     path('', views.ListStatusesView.as_view(), name='list_statuses'),
-    path('create/', views.CreateStatusView.as_view(), name='register_status'),
+    path('create/', views.CreateStatusView.as_view(), name='create_status'),
     path('<int:pk>/delete/', views.DeleteStatusView.as_view(), name='delete_status'),
     path('<int:pk>/update/', views.UpdateStatusView.as_view(), name='update_status'),
 ]

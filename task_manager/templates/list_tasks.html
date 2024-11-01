@@ -9,9 +9,6 @@
   
 <a class="btn btn-primary mb-3" href="/tasks/create/" role="button">Создать задачу</a>
 
-
-
-
 <div class="card mb-3">
 <div class="card-body bg-light">
 <form class="form-inline center" method="get">
@@ -23,47 +20,12 @@
 </select></div>
   <div class="mb-3"><label class="form-label" for="id_executor">Исполнитель</label><select name="executor" class="form-select mr-3 ml-2" id="id_executor">
 <option value="" selected>---------</option>
-
 <option value="1">Maksim Rubanets</option>
 
-<option value="2">test test</option>
-
-<option value="3">123 456</option>
-
-<option value="4">ben gurion</option>
-
-<option value="6">123 123</option>
-
-<option value="8">qwe asd</option>
-
-<option value="9">3 3</option>
-
-<option value="10">trtr trtr</option>
-
-<option value="11">pusik pusik</option>
-
-<option value="12">1 1</option>
-
-<option value="13">imya familiya</option>
-
-<option value="15">1231 1231</option>
-
-<option value="16">123 123</option>
-
-<option value="17">йцуйцу йцу</option>
-
-<option value="18">йцу йцу</option>
-
-<option value="19">qwe qwe</option>
-
-<option value="20">a1 b1</option>
-
-<option value="21">1111 222</option>
 
 </select></div>
   <div class="mb-3"><label class="form-label" for="id_label">Метка</label><select name="label" class="form-select mr-3 ml-2" id="id_label">
 <option value="" selected>---------</option>
-
 <option value="1">метка2</option>
 
 </select></div>
@@ -88,58 +50,22 @@
 </thead>
 <tbody>
 
+  {% for task in tasks %}
   <tr>
-    <td>1</td>
-    <td>
-      <a href="/tasks/1/">задача</a>
-    </td>
-    <td>статус2</td>
-    <td>Maksim Rubanets</td>
-    <td>Maksim Rubanets</td>
-    <td>29.09.2024 13:42</td>
-    <td>
-      <a href="/tasks/1/update/">Изменить</a>
-      <br>
-      <a href="/tasks/1/delete/">Удалить</a>
+    <td>{{ task.id }}</td>
+    <td><a href="/tasks/{{ task.id }}/">{{ status.name }}</a></td>
+    <td>{{ task.status }}</td>
+    <td>{{ task.author }}</td>
+    <td>{{ task.executor }}</td>
+    <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
+    <td class="d-flex flex-column">
+      <a href="{% url 'update_task' task.id %}" class="d-inline-block">Изменить</a>
+      <a href="{% url 'delete_task' task.id %}" class="d-inline-block">Удалить</a>
     </td>
   </tr>
-
-  <tr>
-    <td>2</td>
-    <td>
-      <a href="/tasks/2/">sdgsd</a>
-    </td>
-    <td>статус2</td>
-    <td>Maksim Rubanets</td>
-    <td>123 123</td>
-    <td>30.09.2024 19:15</td>
-    <td>
-      <a href="/tasks/2/update/">Изменить</a>
-      <br>
-      <a href="/tasks/2/delete/">Удалить</a>
-    </td>
-  </tr>
-
-  <tr>
-    <td>5</td>
-    <td>
-      <a href="/tasks/5/">asd</a>
-    </td>
-    <td>статус2</td>
-    <td>qwe asd</td>
-    <td>1 1</td>
-    <td>02.10.2024 01:34</td>
-    <td>
-      <a href="/tasks/5/update/">Изменить</a>
-      <br>
-      <a href="/tasks/5/delete/">Удалить</a>
-    </td>
-  </tr>
+  {% endfor %}
 
 </tbody>
 </table>
-
-
-
 
 {% endblock %}

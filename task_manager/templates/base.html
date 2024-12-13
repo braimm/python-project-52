@@ -5,12 +5,12 @@
 <html lang="ru-ru">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Менеджер задач Hexlet</title>
+    <title>{% translate "Task manager Hexlet" %}</title>
     {% bootstrap_css %}
   </head>
   <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-light ms-3">
-      <a class="navbar-brand" href="/">Менеджер задач</a>
+      <a class="navbar-brand" href="/">{% translate "Task manager" %}</a>
       <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -18,29 +18,29 @@
       <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'list_users' %}">Пользователи</a>
+            <a class="nav-link" href="{% url 'list_users' %}">{% translate "Users" %}</a>
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'list_statuses' %}">Статусы</a>
+            <a class="nav-link" href="{% url 'list_statuses' %}">{% translate "Statuses" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'list_labels' %}">Метки</a>
+            <a class="nav-link" href="{% url 'list_labels' %}">{% translate "Labels" %}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'list_tasks' %}">Задачи</a>
+            <a class="nav-link" href="{% url 'list_tasks' %}">{% translate "Tasks" %}</a>
           </li>
           {% endif %}
 
         {% if user.is_authenticated %}
         <form action="{% url 'logout' %}" method="post">
           {% csrf_token %}
-          <input class="btn nav-link" type="submit" value="Выход">
+          <input class="btn nav-link" type="submit" value="{% translate 'Logout' %}">
         </form>
         {% else %}
         <div class="d-flex">
-          <a class="nav-link" href="{% url 'login' %}">Вход</a>
-          <a class="nav-link" href="{% url 'register_user' %}">Регистрация</a>
+          <a class="nav-link" href="{% url 'login' %}">{% translate "Login" %}</a>
+          <a class="nav-link" href="{% url 'create_user' %}">{% translate "Registration" %}</a>
         </div>
         {% endif %}
         </ul>
@@ -57,7 +57,7 @@
     
     <footer>
       <div class="container my-5 pt-4 border-top">
-        <a target="_blank" href="https://ru.hexlet.io">Hexlet</a>
+        <a target="_blank" href="https://ru.hexlet.io">{% translate "Hexlet" %}</a>
       </div>
     </footer>
   </body>

@@ -22,6 +22,7 @@ from task_manager.tasks import views
 
 urlpatterns = [
     path('', views.ListTasksView.as_view(), name='list_tasks'),
+    # path('', views.ListTasksView, name='list_tasks'),
     path('create/', views.CreateTaskView.as_view(), name='create_task'),
     path('<int:pk>/', views.PageTaskView.as_view(), name='page_task'),
     path('<int:pk>/delete/', views.DeleteTaskView.as_view(), name='delete_task'),

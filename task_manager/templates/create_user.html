@@ -1,41 +1,44 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+{% load django_bootstrap5 %}
+
 {% block content %}
-    <h1 class="my-4">Регистрация</h1>    
+    <h1 class="my-4">{% translate 'Registration' %}</h1>    
     <form action="{% url 'create_user' %}" method="post">
         {% csrf_token %}
         <input type="hidden">
         <div class="mb-3">
-            <label class="form-label" for="id_first_name">Имя</label>
-            <input type="text" name="first_name" maxlength="150" class="form-control" placeholder="Имя" required id="id_first_name">
+            <label class="form-label" for="id_first_name">{% translate 'First name' %}</label>
+            <input type="text" name="first_name" maxlength="150" class="form-control" placeholder="{% translate 'First name' %}" required id="id_first_name">
         </div>
         <div class="mb-3">
-            <label class="form-label" for="id_last_name">Фамилия</label>
-            <input type="text" name="last_name" maxlength="150" class="form-control" placeholder="Фамилия" required id="id_last_name">
+            <label class="form-label" for="id_last_name">{% translate 'Last name' %}</label>
+            <input type="text" name="last_name" maxlength="150" class="form-control" placeholder="{% translate 'Last name' %}" required id="id_last_name">
         </div>
         <div class="mb-3">
-            <label class="form-label" for="id_username">Имя пользователя</label>
-            <input type="text" name="username" maxlength="150" autofocus class="form-control" placeholder="Имя пользователя" required aria-describedby="id_username_helptext" id="id_username">
+            <label class="form-label" for="id_username">{% translate 'User name' %}</label>
+            <input type="text" name="username" maxlength="150" autofocus class="form-control" placeholder="{% translate 'User name' %}" required aria-describedby="id_username_helptext" id="id_username">
             <div class="form-text">
-                Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.
+                {% translate 'Required field. No more than 150 characters. Only letters, numbers and symbols @/./+/-/_.' %}
             </div>
         </div>
         <div class="mb-3">
-            <label class="form-label" for="id_password">Пароль</label>
-            <input type="password" name="password" autocomplete="new-password" class="form-control" placeholder="Пароль" required aria-describedby="id_password_helptext" id="id_password">
+            <label class="form-label" for="id_password">{% translate 'Password' %}</label>
+            <input type="password" name="password" autocomplete="new-password" class="form-control" placeholder="{% translate 'Password' %}" required aria-describedby="id_password_helptext" id="id_password">
             <div class="form-text">
                 <ul>
-                    <li>Ваш пароль должен содержать как минимум 3 символа.</li>
+                    <li>{% translate 'Your password must contain at least 3 characters.' %}</li>
                 </ul>
             </div>
         </div>
         <div class="mb-3">
-            <label class="form-label" for="id_password2">Подтверждение пароля</label>
-            <input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="Подтверждение пароля" required aria-describedby="id_password2_helptext" id="id_password2">
+            <label class="form-label" for="id_password2">{% translate 'Password Confirmation' %}</label>
+            <input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="{% translate 'Password Confirmation' %}" required aria-describedby="id_password2_helptext" id="id_password2">
             <div class="form-text">
-                Для подтверждения введите, пожалуйста, пароль ещё раз.
+                {% translate 'Please enter the password again to confirm.' %}
             </div>
         </div>
-        <input class="btn btn-primary" type="submit" value="Зарегистрировать">
+        <input class="btn btn-primary" type="submit" value="{% translate 'Register' %}">
     </form>
 {% endblock %}

@@ -44,9 +44,17 @@ INSTALLED_APPS = [
     'task_manager.statuses',
     'task_manager.labels',
     'task_manager.tasks',
+    'django_filters',
 ]
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_FILTER_BACKENDS': (
+#         'django_filters.rest_framework.DjangoFilterBackend',
+#     ),
+# }
+
 MIDDLEWARE = [
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -110,13 +118,22 @@ AUTH_PASSWORD_VALIDATORS = [
     #},
 ]
 
-#AUTH_USER_MODEL = "users.User"
+
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
+
+LANGUAGES = (
+    ('en-US', 'English'),
+    ('ru-RU', 'Russian'),
+)
+
+LOCALE_PATHS = [
+    '/locale',
+]
 
 TIME_ZONE = 'UTC'
 

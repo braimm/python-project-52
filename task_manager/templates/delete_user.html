@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+{% load django_bootstrap5 %}
+
 {% block content %}
-    <h1 class="my-4">Удаление пользователя</h1>
-    <p>Вы уверены, что хотите удалить {{ user.get_full_name }}?</p>
+    <h1 class="my-4">{% translate 'Deleting user' %}</h1>
+    <p>{% translate 'Are you sure you want to delete' %} {{ user.get_full_name }}?</p>
     <form method="post">
         {% csrf_token %}
         <input type="hidden">
-        <input class="btn btn-danger" type="submit" value="Да, удалить">
+        <input class="btn btn-danger" type="submit" value="{% translate 'Yes, delete' %}">
     </form>
 
 {% endblock %}

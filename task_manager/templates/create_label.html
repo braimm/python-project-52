@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+{% load django_bootstrap5 %}
+
 {% block content %}
-    <h1 class="my-4">Создать метку</h1>    
+    <h1 class="my-4">{% translate "Create label" %}</h1>    
     <form action="{% url 'create_label' %}" method="post">
         {% csrf_token %}
         <input type="hidden">
         <div class="mb-3">
-            <label class="form-label" for="id_name">Имя</label>
-            <input type="text" name="name" maxlength="150" class="form-control" placeholder="Имя" required id="id_name">
+            <label class="form-label" for="id_name">{% translate "Name" %}</label>
+            <input type="text" name="name" maxlength="150" class="form-control" placeholder="{% translate 'Name' %}" required id="id_name">
         </div>
-        <input class="btn btn-primary" type="submit" value="Создать">
+        <input class="btn btn-primary" type="submit" value="{% translate 'Create' %}">
     </form>
 {% endblock %}

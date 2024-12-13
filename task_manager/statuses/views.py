@@ -7,6 +7,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from task_manager.statuses.models import Status
 from task_manager.statuses.forms import CreateStatusForm
+from task_manager.ext_mixins import NoLogin
+from django.utils.translation import gettext as _
 
 # Create your views here.
 
@@ -17,30 +19,34 @@ from task_manager.statuses.forms import CreateStatusForm
 #        pass
 
 
-class ListStatusesView(ListView):
+class ListStatusesView(NoLogin, ListView):
     model = Status
     template_name = 'list_statuses.html'
     context_object_name = 'statuses'
 
 
-class CreateStatusView(View):
+class CreateStatusView(NoLogin, View):
     def get(self, request):
         return render(request, 'create_status.html')
     def post(self, request):
         form = CreateStatusForm(request.POST)
-        print(form)
-        print(form.is_valid())
-        print(form.errors)
-        #if form.is_valid():
-        form.save()
-        messages.success(request, 'Статус успешно создан')
-        return HttpResponseRedirect(reverse("list_statuses"))
-        #return render(request, 'create_status.html')
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Status successfully created'))
+            return HttpResponseRedirect(reverse("list_statuses"))
+        return render(request, 'create_status.html')
 
 
-class UpdateStatusView(SuccessMessageMixin, UpdateView):
-    pass
+class UpdateStatusView(NoLogin, SuccessMessageMixin, UpdateView):
+    model = Status
+    form_class = CreateStatusForm
+    template_name = 'update_status.html'
+    success_url = reverse_lazy("list_statuses")
+    success_message = _('Status successfully updated')
 
 
-class DeleteStatusView(SuccessMessageMixin, DeleteView):
-    pass
+class DeleteStatusView(NoLogin, SuccessMessageMixin, DeleteView):
+    model = Status
+    template_name = 'delete_status.html'
+    success_url = reverse_lazy("list_statuses")
+    success_message = _('Status successfully deleted')

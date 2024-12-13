@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
 
+{% load django_bootstrap5 %}
+{% load i18n %}
+
 {% block content %}
-    <h1 class="my-4">Пользователи</h1>
+    <h1 class="my-4">{% translate "Users" %}</h1>
   
     <table class="table table-striped">
       <thead>
         <tr>
           <th>ID</th>
-          <th>Имя пользователя</th>
-          <th>Полное имя</th>
-          <th>Дата создания</th>
+          <th>{% translate "User name" %}</th>
+          <th>{% translate "Full name" %}</th>
+          <th>{% translate "Create data" %}</th>
           <th></th>
         </tr>
       </thead>
@@ -23,8 +26,8 @@
           <td>{{ user.get_full_name }}</td>
           <td>{{ user.date_joined|date:"d.m.Y H:i" }}</td>
           <td class="d-flex flex-column">
-            <a href="{% url 'update_user' user.id %}" class="d-inline-block">Изменить</a>
-            <a href="{% url 'delete_user' user.id %}" class="d-inline-block">Удалить</a>
+            <a href="{% url 'update_user' user.id %}" class="d-inline-block">{% translate "Update"%}</a>
+            <a href="{% url 'delete_user' user.id %}" class="d-inline-block">{% translate "Delete"%}</a>
           </td>
         </tr>
         {% endfor %}

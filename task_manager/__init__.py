@@ -1,4 +1,4 @@
-from task_manager import settings, forms
+from task_manager import settings
 
 
-__all__ = ['settings', 'forms']
+__all__ = ['settings']

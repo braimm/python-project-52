@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
@@ -45,8 +45,21 @@ class UpdateStatusView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Status successfully updated')
 
 
-class DeleteStatusView(NoLogin, SuccessMessageMixin, DeleteView):
-    model = Status
-    template_name = 'delete_status.html'
-    success_url = reverse_lazy("list_statuses")
-    success_message = _('Status successfully deleted')
+# class DeleteStatusView(NoLogin, SuccessMessageMixin, DeleteView):
+#     model = Status
+#     template_name = 'delete_status.html'
+#     success_url = reverse_lazy("list_statuses")
+#     success_message = _('Status successfully deleted')
+
+class DeleteStatusView(NoLogin, View):    
+    def get(self, request, pk):
+        return render(request, 'delete_status.html')
+
+    def post(self, request, pk):        
+        status = Status.objects.get(pk=pk)
+        if status.status.exists():
+            messages.error(request, _('The status cannot be deleted because it is in use'))
+            return redirect('list_statuses')
+        status.delete()
+        messages.success(request, _('Status successfully deleted'))
+        return redirect('list_statuses')

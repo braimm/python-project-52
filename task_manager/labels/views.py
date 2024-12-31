@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -38,8 +38,22 @@ class UpdateLabelView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Label successfully updated')
 
 
-class DeleteLabelView(NoLogin, SuccessMessageMixin, DeleteView):
-    model = Label
-    template_name = 'delete_label.html'
-    success_url = reverse_lazy("list_labels")
-    success_message = _('Label successfully deleted')
+# class DeleteLabelView(NoLogin, SuccessMessageMixin, DeleteView):
+#     model = Label
+#     template_name = 'delete_label.html'
+#     success_url = reverse_lazy("list_labels")
+#     success_message = _('Label successfully deleted')
+
+class DeleteLabelView(NoLogin, View):    
+    def get(self, request, pk):
+        return render(request, 'delete_label.html')
+
+    def post(self, request, pk):        
+        label = Label.objects.get(pk=pk)
+        if label.labels.exists():
+            messages.error(request, _('The label cannot be deleted because it is in use'))
+            return redirect('list_labels')
+        label.delete()
+        messages.success(request, _('Label successfully deleted'))
+        return redirect('list_labels')
+

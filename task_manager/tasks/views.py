@@ -48,7 +48,7 @@ from django.utils.translation import gettext as _
 class ListTasksView(View):
     template = 'list_tasks.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         tasks = Task.objects.all()
         statuses = Status.objects.all()
         executors = get_user_model().objects.all()
@@ -56,13 +56,13 @@ class ListTasksView(View):
         tasks_filtered = TasksFilter(
             request.GET, queryset=tasks, request=request
         )
-
         return render(
             request, self.template, {
                 'statuses': statuses,
                 'executors': executors,
                 'labels': labels,
-                'filter': tasks_filtered}
+                'filter': tasks_filtered
+            }
         )
 
 

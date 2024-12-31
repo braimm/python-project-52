@@ -1,5 +1,6 @@
 from django import forms 
 from task_manager.tasks.models import Task
+from django.utils.translation import gettext as _
 
 
 class CreateTaskForm(forms.ModelForm):
@@ -14,10 +15,17 @@ class CreateTaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['name', 'description', 'status', 'executor', 'labels']
+        # labels = {
+        #     'name': 'Имя',
+        #     'description': 'Описание',
+        #     'status': 'Cтатус',
+        #     'executor': 'Исполнитель',
+        #     'labels': 'Метки'
+        # }
         labels = {
-            'name': 'Имя',
-            'description': 'Описание',
-            'status': 'Cтатус',
-            'executor': 'Исполнитель',
-            'labels': 'Метки'
+            'name': _('Name'),
+            'description': _('Description'),
+            'status': _('Status'),
+            'executor': _('Executor'),
+            'labels': _('Labels')
         }

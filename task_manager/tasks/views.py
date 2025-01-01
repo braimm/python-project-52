@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -95,8 +95,21 @@ class UpdateTaskView(NoLogin, SuccessMessageMixin, UpdateView):
 
 
 
-class DeleteTaskView(NoLogin, SuccessMessageMixin, DeleteView):
-    model = Task
-    template_name = 'delete_task.html'
-    success_url = reverse_lazy("list_tasks")
-    success_message = _('Task successfully deleted')
+# class DeleteTaskView(NoLogin, SuccessMessageMixin, DeleteView):
+#     model = Task
+#     template_name = 'delete_task.html'
+#     success_url = reverse_lazy("list_tasks")
+#     success_message = _('Task successfully deleted')
+
+class DeleteTaskView(NoLogin, View):    
+    def get(self, request, pk):
+        return render(request, 'delete_task.html')
+
+    def post(self, request, pk):        
+        task = Task.objects.get(pk=pk)
+        if task.author != request.user:
+            messages.error(request, _('A task can only be deleted by its author'))
+            return redirect('list_tasks')
+        task.delete()
+        messages.success(request, _('Task successfully deleted'))
+        return redirect('list_tasks')

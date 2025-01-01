@@ -12,8 +12,6 @@ from django.utils.translation import gettext_lazy as _
 
 class IndexView(View):
     def get(self, request):
-        a = None
-        a.hello() # Creating an error with an invalid line of code
         return render(request, 'index.html')
 
     

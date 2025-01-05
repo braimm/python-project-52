@@ -34,7 +34,12 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="id_password2">{% translate 'Password Confirmation' %}</label>
-            <input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="{% translate 'Password Confirmation' %}" required aria-describedby="id_password2_helptext" id="id_password2">
+            {% if err %}
+                <input type="password" name="password2" autocomplete="new-password" class="form-control is-invalid" placeholder="{% translate 'Password Confirmation' %}" aria-invalid="true" aria-describedby="id_password2_helptext" id="id_password2">
+                <div class="invalid-feedback">{{ err }}</div>
+            {% else %}
+                <input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="{% translate 'Password Confirmation' %}" required aria-describedby="id_password2_helptext" id="id_password2">
+            {% endif %}
             <div class="form-text">
                 {% translate 'Please enter the password again to confirm.' %}
             </div>

@@ -13,3 +13,26 @@ class RegisterUserForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ['first_name', 'last_name', 'username', 'password']
+
+    def clean_password2(self):
+        cd = self.cleaned_data
+        if cd['password'] != cd['password2']:
+            raise forms.ValidationError("Введенные пароли не совпадают.")
+        if len(cd['password2']) < 3:
+            raise forms.ValidationError("Введённый пароль слишком короткий. Он должен содержать как минимум 3 символа.")
+        return cd['password2']
+
+class UpdateUserForm(forms.Form):
+    first_name = forms.CharField(max_length=150, label=_('First name'))
+    last_name = forms.CharField(max_length=150, label=_('Last name'))
+    username = forms.CharField(max_length=150, required=True, label=_('User name'))
+    password = forms.CharField(label=_('Password'), widget=forms.PasswordInput)
+    password2 = forms.CharField(label=_('Password Confirmation'), widget=forms.PasswordInput)
+  
+    def clean_password2(self):
+        cd = self.cleaned_data
+        if cd['password'] != cd['password2']:
+            raise forms.ValidationError("Введенные пароли не совпадают.")
+        if len(cd['password2']) < 3:
+            raise forms.ValidationError("Введённый пароль слишком короткий. Он должен содержать как минимум 3 символа.")
+        return cd['password2']

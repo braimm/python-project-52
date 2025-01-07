@@ -1,19 +1,20 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
+from django.contrib.messages import get_messages, constants as message_constants
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.deletion import ProtectedError
 # Create your tests here.
 
 class UsersTest(TestCase):
     fixtures = ['users.json', 'statuses.json', 'tasks.json', 'labels.json']
-    # test_user = {
-    #     'first_name': 'firstname test input user',
-    #     'last_name': 'lastname test input user',
-    #     'username': 'inputusername',
-    #     'password': '123',
-    #     'password2': '123',
-    # }
+    input_user = {
+        'first_name': 'firstname test input user',
+        'last_name': 'lastname test input user',
+        'username': 'inputusername',
+        'password': 'Qqq123',
+        'password2': 'Qqq123',
+        }
 
     def setUp(self):
         self.client = Client()
@@ -38,32 +39,43 @@ class UsersTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='create_user.html')
 
-        inputform = {
-        'first_name': 'firstname test input user',
-        'last_name': 'lastname test input user',
-        'username': 'inputusername',
-        'password': 'Qqq123',
-        'password2': 'Qqq123',
-        }
+        inputform = self.input_user
         response_post = self.client.post(reverse_lazy('create_user'), inputform)
-        self.assertTrue(get_user_model().objects.get(id=5))
+        self.assertTrue(get_user_model().objects.get(pk=5))
         self.assertEqual(response_post.status_code, 302)
         self.assertRedirects(response_post, reverse_lazy('login'))
 
+    def test_user_update_without_auth(self):
+        response_redirect = self.client.get(
+            reverse_lazy('update_user', args=[self.user1.pk])
+        )
+        self.assertEqual(response_redirect.status_code, 302)
+        self.assertRedirects(response_redirect, '/login/?next=/users/1/update/')
+        messages = list(get_messages(response_redirect.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(messages[0].level, message_constants.ERROR)
+        self.assertRaisesMessage(
+            expected_exception=ProtectedError,
+            expected_message='Вы не авторизованы! Пожалуйста, выполните вход.'
+        )
+        
+        
     def test_another_user_update(self):
         self.client.force_login(self.user2)
         response_redirect = self.client.get(
-            reverse_lazy('update_user', args=[self.user1.id])
+            reverse_lazy('update_user', args=[self.user1.pk])
         )
         self.assertEqual(response_redirect.status_code, 302)
         self.assertRedirects(response_redirect, reverse_lazy('list_users'))
-
-    def test_user_update_without_auth(self):
-        response_redirect = self.client.get(
-            reverse_lazy('user_update', args=[self.user1.id])
+        messages = list(get_messages(response_redirect.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "У вас нет прав для изменения другого пользователя.")
+        self.assertEqual(messages[0].level, message_constants.ERROR)
+        self.assertRaisesMessage(
+            expected_exception=ProtectedError,
+            expected_message='У вас нет прав для изменения другого пользователя.'
         )
-        self.assertEqual(response_redirect.status_code, 302)
-        self.assertRedirects(response_redirect, reverse_lazy('login'))
 
     def test_user_update(self):
         self.client.force_login(self.user1)
@@ -72,65 +84,60 @@ class UsersTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='update_user.html')
+        inputform = self.input_user
+        response = self.client.post(
+            reverse_lazy('update_user', args=[self.user1.id]),
+            inputform
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse_lazy('list_users'))
+        updated_user = get_user_model().objects.get(pk=self.user1.pk)
+        self.assertEqual(updated_user.username, inputform['username'])
+        self.assertEqual(updated_user.first_name, inputform['first_name'])
+        self.assertEqual(updated_user.last_name, inputform['last_name'])
 
-    # def test_user_update_another_user(self):
-    #     self.client.force_login(self.user2)
-    #     response = self.client.get(
-    #         reverse_lazy('user_update', args=[self.user1.id])
-    #     )
+    def test_user_delete_without_auth(self):
+        response_redirect = self.client.get(
+            reverse_lazy('delete_user', args=[self.user1.pk])
+        )
+        self.assertEqual(response_redirect.status_code, 302)
+        self.assertRedirects(response_redirect, '/login/?next=/users/1/delete/')
+        messages = list(get_messages(response_redirect.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(messages[0].level, message_constants.ERROR)
+        self.assertRaisesMessage(
+            expected_exception=ProtectedError,
+            expected_message='Вы не авторизованы! Пожалуйста, выполните вход.'
+        )
 
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertRedirects(response, reverse_lazy('users'))
+    def test_free_user_delete_get(self):
+        self.client.force_login(self.user4)
+        response = self.client.get(
+            reverse_lazy('delete_user', args=[self.user4.pk])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='delete_user.html')
+        count_users_before_del = len(get_user_model().objects.all())
+        response = self.client.post(
+            reverse_lazy('delete_user', args=[self.user4.pk])
+        )
+        count_users_after_delete = len(get_user_model().objects.all())
+        self.assertTrue(count_users_after_delete == count_users_before_del - 1)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse_lazy('list_users'))
+        with self.assertRaises(ObjectDoesNotExist):
+            get_user_model().objects.get(id=self.user4.pk)
 
-    # def test_user_update_post(self):
-    #     self.client.force_login(self.user1)
-    #     params = self.test_user
-    #     response = self.client.post(
-    #         reverse_lazy('user_update', args=[self.user1.id]),
-    #         data=params
-    #     )
-
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertRedirects(response, reverse_lazy('users'))
-
-    #     updated_user = get_user_model().objects.get(id=self.user1.id)
-
-    #     self.assertEqual(updated_user.username, params['username'])
-    #     self.assertEqual(updated_user.first_name, params['first_name'])
-    #     self.assertEqual(updated_user.last_name, params['last_name'])
-
-    # def test_user_delete_get(self):
-    #     self.client.force_login(self.user1)
-    #     response = self.client.get(
-    #         reverse_lazy('user_delete', args=[self.user1.id])
-    #     )
-
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTemplateUsed(response, template_name='delete.html')
-
-    # def test_user_delete_post(self):
-    #     self.client.force_login(self.user3)
-    #     before_objs_len = len(get_user_model().objects.all())
-    #     response = self.client.post(
-    #         reverse_lazy('user_delete', args=[self.user3.id])
-    #     )
-    #     after_objs_len = len(get_user_model().objects.all())
-
-    #     self.assertTrue(after_objs_len == before_objs_len - 1)
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertRedirects(response, reverse_lazy('users'))
-    #     with self.assertRaises(ObjectDoesNotExist):
-    #         get_user_model().objects.get(id=self.user3.id)
-
-    # def test_user_delete_linked(self):
-    #     self.client.force_login(self.user2)
-    #     before_objs_len = len(get_user_model().objects.all())
-    #     self.client.post(
-    #         reverse_lazy('user_delete', args=[self.user2.id])
-    #     )
-    #     after_objs_len = len(get_user_model().objects.all())
-    #     self.assertTrue(after_objs_len == before_objs_len)
-    #     self.assertRaisesMessage(
-    #         expected_exception=ProtectedError,
-    #         expected_message=''
-    #     )
+    def test_nonfree_user_delete(self):
+        self.client.force_login(self.user1)
+        count_users_before_del = len(get_user_model().objects.all())
+        self.client.post(
+            reverse_lazy('delete_user', args=[self.user1.id])
+        )
+        count_users_after_delete = len(get_user_model().objects.all())
+        self.assertTrue(count_users_before_del == count_users_after_delete)
+        self.assertRaisesMessage(
+            expected_exception=ProtectedError,
+            expected_message='Невозможно удалить пользователя, потому что он используется'
+        )

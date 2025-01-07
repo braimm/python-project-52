@@ -73,3 +73,64 @@ class UsersTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='update_user.html')
 
+    # def test_user_update_another_user(self):
+    #     self.client.force_login(self.user2)
+    #     response = self.client.get(
+    #         reverse_lazy('user_update', args=[self.user1.id])
+    #     )
+
+    #     self.assertEqual(response.status_code, 302)
+    #     self.assertRedirects(response, reverse_lazy('users'))
+
+    # def test_user_update_post(self):
+    #     self.client.force_login(self.user1)
+    #     params = self.test_user
+    #     response = self.client.post(
+    #         reverse_lazy('user_update', args=[self.user1.id]),
+    #         data=params
+    #     )
+
+    #     self.assertEqual(response.status_code, 302)
+    #     self.assertRedirects(response, reverse_lazy('users'))
+
+    #     updated_user = get_user_model().objects.get(id=self.user1.id)
+
+    #     self.assertEqual(updated_user.username, params['username'])
+    #     self.assertEqual(updated_user.first_name, params['first_name'])
+    #     self.assertEqual(updated_user.last_name, params['last_name'])
+
+    # def test_user_delete_get(self):
+    #     self.client.force_login(self.user1)
+    #     response = self.client.get(
+    #         reverse_lazy('user_delete', args=[self.user1.id])
+    #     )
+
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertTemplateUsed(response, template_name='delete.html')
+
+    # def test_user_delete_post(self):
+    #     self.client.force_login(self.user3)
+    #     before_objs_len = len(get_user_model().objects.all())
+    #     response = self.client.post(
+    #         reverse_lazy('user_delete', args=[self.user3.id])
+    #     )
+    #     after_objs_len = len(get_user_model().objects.all())
+
+    #     self.assertTrue(after_objs_len == before_objs_len - 1)
+    #     self.assertEqual(response.status_code, 302)
+    #     self.assertRedirects(response, reverse_lazy('users'))
+    #     with self.assertRaises(ObjectDoesNotExist):
+    #         get_user_model().objects.get(id=self.user3.id)
+
+    # def test_user_delete_linked(self):
+    #     self.client.force_login(self.user2)
+    #     before_objs_len = len(get_user_model().objects.all())
+    #     self.client.post(
+    #         reverse_lazy('user_delete', args=[self.user2.id])
+    #     )
+    #     after_objs_len = len(get_user_model().objects.all())
+    #     self.assertTrue(after_objs_len == before_objs_len)
+    #     self.assertRaisesMessage(
+    #         expected_exception=ProtectedError,
+    #         expected_message=''
+    #     )

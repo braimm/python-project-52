@@ -17,43 +17,22 @@ class ListUsersView(ListView):
     template_name = 'list_users.html'
     context_object_name = 'users'
 
+
 class CreateUserView(View):
     
     def get(self, request):
         return render(request, 'create_user.html')
 
     def post(self, request):
-        form = RegisterUserForm(request.POST)
+        form = RegisterUserForm(request.POST)        
         if form.is_valid():
             user = form.save(commit=False)
-            # if form.cleaned_data['password'] != form.cleaned_data['password2']:            
-            #     context = {
-            #         'form': form,
-            #         'error': 'Введенные пароли не совпадают.'
-            #     }
-            #     return render(request, 'create_user.html', context)
-            # if len(form.cleaned_data['password']) < 3:            
-            #     error = '''
-            #         Введённый пароль слишком короткий.
-            #         Он должен содержать как минимум 3 символа.
-            #     '''
-            #     context = {
-            #         'form': form,
-            #         'error': error
-            #     }
-            #     return render(request, 'create_user.html', context)
             user.set_password(form.cleaned_data['password'])
             user.save()
             messages.success(request, _('User successfully registered'))
             return redirect('login')
-        context = {
-            'form': form,
-            'err': str(form.errors.as_data().get('password2')[0])[2:-2]
-        }
-        return render(request, 'create_user.html', context)
-        # return render(request, 'create_user.html')
-    
-
+        username = request.POST.get('username')
+        return render(request, 'create_user.html', {'form': form, 'username': username })
 
 
 class UpdateUserView(NoLogin, UpdateView):
@@ -66,14 +45,16 @@ class UpdateUserView(NoLogin, UpdateView):
         if pk != request.user.pk:
             messages.error(request, _('You do not have permission to modify another user.'))
             return redirect(reverse_lazy('list_users'))
-        # return render(request, 'update_user.html')
         return super().get(request, pk)
 
     def post(self, request, pk):
         form = UpdateUserForm(request.POST)
-        print(form.is_valid())
-        print(form)
-        if form.is_valid():
+        input_username = request.POST.get('username')
+        current_username = request.user.username
+        is_conflict_username = False
+        if current_username != input_username:
+            is_conflict_username = get_user_model().objects.filter(username=input_username).exists()
+        if form.is_valid() and not is_conflict_username:
             user = get_user_model().objects.get(pk=pk)
             user.first_name = form.cleaned_data['first_name'] 
             user.last_name = form.cleaned_data['last_name']
@@ -82,30 +63,11 @@ class UpdateUserView(NoLogin, UpdateView):
             user.save()
             messages.success(request, _('User successfully updated'))
             return redirect('list_users')
-        context = {
-            'form': form,
-            'err': str(form.errors.as_data().get('password2')[0])[2:-2]
-        }
-        return render(request, 'update_user.html', context)
+        if is_conflict_username:
+            form.add_error('username', "Пользователь с таким именем уже существует.")
 
-    # def post(self, request, pk):
-    #     form = UpdateUserForm(request.POST)
-    #     print(form.is_valid())
-    #     print(form)
-    #     if not form.is_valid():
-    #         context = {
-    #             'form': form,
-    #             'err': str(form.errors.as_data().get('password2')[0])[2:-2]
-    #         }
-    #         return render(request, 'update_user.html', context)
-    #     return super().post(request, pk)
+        return render(request, 'update_user.html', {'form': form, 'username': input_username})
 
-
-# class DeleteUserView(SuccessMessageMixin, DeleteView):
-#     model = get_user_model()
-#     template_name = 'delete_user.html'
-#     success_url = reverse_lazy("list_users")
-#     success_message = _('User successfully delete')
 
 class DeleteUserView(NoLogin, View):    
     def get(self, request, pk):

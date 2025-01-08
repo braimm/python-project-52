@@ -12,13 +12,6 @@ from django.utils.translation import gettext as _
 
 # Create your views here.
 
-#class ListStatusesView(View):
-#    def get(self, request):
-#        return render(request, 'list_statuses.html')
-#    def post(self, request):
-#        pass
-
-
 class ListStatusesView(NoLogin, ListView):
     model = Status
     template_name = 'list_statuses.html'

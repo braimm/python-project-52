@@ -45,7 +45,7 @@ from django.utils.translation import gettext as _
 #         return HttpResponseRedirect(reverse("list_tasks"))
 #         #return render(request, 'create_status.html')
 
-class ListTasksView(View):
+class ListTasksView(NoLogin, View):
     template = 'list_tasks.html'
 
     def get(self, request):

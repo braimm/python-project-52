@@ -80,13 +80,13 @@ class UsersTest(TestCase):
     def test_user_update(self):
         self.client.force_login(self.user1)
         response = self.client.get(
-            reverse_lazy('update_user', args=[self.user1.id])
+            reverse_lazy('update_user', args=[self.user1.pk])
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='update_user.html')
         inputform = self.input_user
         response = self.client.post(
-            reverse_lazy('update_user', args=[self.user1.id]),
+            reverse_lazy('update_user', args=[self.user1.pk]),
             inputform
         )
         self.assertEqual(response.status_code, 302)
@@ -111,7 +111,22 @@ class UsersTest(TestCase):
             expected_message='Вы не авторизованы! Пожалуйста, выполните вход.'
         )
 
-    def test_free_user_delete_get(self):
+    def test_another_user_delete(self):
+        self.client.force_login(self.user2)
+        response_redirect = self.client.get(
+            reverse_lazy('delete_user', args=[self.user1.pk])
+        )
+        self.assertEqual(response_redirect.status_code, 302)
+        self.assertRedirects(response_redirect, reverse_lazy('list_users'))
+        messages = list(get_messages(response_redirect.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "У вас нет прав для изменения другого пользователя.")
+        self.assertEqual(messages[0].level, message_constants.ERROR)
+        self.assertRaisesMessage(
+            expected_exception=ProtectedError,
+            expected_message='У вас нет прав для изменения другого пользователя.')
+
+    def test_free_user_delete(self):
         self.client.force_login(self.user4)
         response = self.client.get(
             reverse_lazy('delete_user', args=[self.user4.pk])
@@ -133,10 +148,10 @@ class UsersTest(TestCase):
         self.client.force_login(self.user1)
         count_users_before_del = len(get_user_model().objects.all())
         self.client.post(
-            reverse_lazy('delete_user', args=[self.user1.id])
+            reverse_lazy('delete_user', args=[self.user1.pk])
         )
-        count_users_after_delete = len(get_user_model().objects.all())
-        self.assertTrue(count_users_before_del == count_users_after_delete)
+        count_users_after_del = len(get_user_model().objects.all())
+        self.assertTrue(count_users_before_del == count_users_after_del)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
             expected_message='Невозможно удалить пользователя, потому что он используется'

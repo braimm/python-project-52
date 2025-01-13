@@ -1,7 +1,10 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
-from django.contrib.messages import get_messages, constants as message_constants
+from django.contrib.messages import (
+    get_messages,
+    constants as message_constants
+)
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.deletion import ProtectedError
 from .models import Status
@@ -117,6 +120,19 @@ class StatusesTest(TestCase):
             expected_message='Вы не авторизованы! Пожалуйста, выполните вход.'
         )
 
+    def test_nonfree_status_delete(self):
+        self.client.force_login(self.user)
+        count_statuses_before_del = len(Status.objects.all())
+        self.client.post(
+            reverse_lazy('delete_status', args=[self.status2.pk])
+        )
+        count_statuses_after_del = len(Status.objects.all())
+        self.assertTrue(count_statuses_before_del == count_statuses_after_del)
+        self.assertRaisesMessage(
+            expected_exception=ProtectedError,
+            expected_message='Невозможно удалить метку, потому что она используется'
+        )
+
     def test_free_status_delete(self):
         self.client.force_login(self.user)
         response = self.client.get(
@@ -133,17 +149,4 @@ class StatusesTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse_lazy('list_statuses'))
         with self.assertRaises(ObjectDoesNotExist):
-            Status.objects.get(id=self.free_status.pk)
-
-    def test_nonfree_status_delete(self):
-        self.client.force_login(self.user)
-        count_statuses_before_del = len(Status.objects.all())
-        self.client.post(
-            reverse_lazy('delete_status', args=[self.status2.id])
-        )
-        count_statuses_after_del = len(Status.objects.all())
-        self.assertTrue(count_statuses_before_del == count_statuses_after_del)
-        self.assertRaisesMessage(
-            expected_exception=ProtectedError,
-            expected_message='Невозможно удалить метку, потому что она используется'
-        )
+            Status.objects.get(pk=self.free_status.pk)

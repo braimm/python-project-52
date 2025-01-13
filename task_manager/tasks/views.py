@@ -66,9 +66,6 @@ class ListTasksView(NoLogin, View):
         )
 
 
-
-
-
 class CreateTaskView(NoLogin, CreateView):
     form_class = CreateTaskForm
     context_object_name = 'test'

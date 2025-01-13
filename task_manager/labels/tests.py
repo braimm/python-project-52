@@ -1,11 +1,15 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
-from django.contrib.messages import get_messages, constants as message_constants
+from django.contrib.messages import (
+    get_messages,
+    constants as message_constants
+)
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.deletion import ProtectedError
 from .models import Label
 # Create your tests here.
+
 
 class LabelsTest(TestCase):
     fixtures = ['users.json', 'statuses.json', 'tasks.json', 'labels.json']
@@ -18,14 +22,16 @@ class LabelsTest(TestCase):
         self.free_label = Label.objects.get(pk=3)
         self.user = get_user_model().objects.get(pk=1)
 
-
     def test_labels_list_without_auth(self):
         response = self.client.get(reverse_lazy('list_labels'))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/login/?next=/labels/')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
@@ -45,7 +51,10 @@ class LabelsTest(TestCase):
         self.assertRedirects(response, '/login/?next=/labels/create/')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
@@ -56,8 +65,11 @@ class LabelsTest(TestCase):
         response = self.client.get(reverse_lazy('create_label'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='create_label.html')
-        response_post = self.client.post(reverse_lazy('create_label'), self.input_label)
-        new_label= Label.objects.get(pk=4)
+        response_post = self.client.post(
+            reverse_lazy('create_label'),
+            self.input_label
+        )
+        new_label = Label.objects.get(pk=4)
         self.assertTrue(new_label)
         self.assertEqual(new_label.name, self.input_label['name'])
         self.assertEqual(response_post.status_code, 302)
@@ -65,17 +77,22 @@ class LabelsTest(TestCase):
         response = self.client.get(reverse_lazy('list_labels'))
         labels_list = response.context['labels']
         self.assertTrue(len(labels_list) == 4)
-   
 
     def test_label_update_without_auth(self):
         response_redirect = self.client.get(
             reverse_lazy('update_label', args=[self.label1.pk])
         )
         self.assertEqual(response_redirect.status_code, 302)
-        self.assertRedirects(response_redirect, '/login/?next=/labels/1/update/')
+        self.assertRedirects(
+            response_redirect,
+            '/login/?next=/labels/1/update/'
+        )
         messages = list(get_messages(response_redirect.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
@@ -107,10 +124,16 @@ class LabelsTest(TestCase):
             reverse_lazy('delete_label', args=[self.label1.pk])
         )
         self.assertEqual(response_redirect.status_code, 302)
-        self.assertRedirects(response_redirect, '/login/?next=/labels/1/delete/')
+        self.assertRedirects(
+            response_redirect,
+            '/login/?next=/labels/1/delete/'
+        )
         messages = list(get_messages(response_redirect.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
@@ -145,5 +168,6 @@ class LabelsTest(TestCase):
         self.assertTrue(count_labels_before_del == count_labels_after_del)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
-            expected_message='Невозможно удалить метку, потому что она используется'
+            expected_message='Невозможно удалить метку, \
+                потому что она используется'
         )

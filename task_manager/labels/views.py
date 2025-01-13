@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from django.views.generic import ListView, UpdateView
 from task_manager.labels.models import Label
 from task_manager.labels.forms import CreateLabelForm
 from task_manager.ext_mixins import NoLogin
@@ -23,6 +23,7 @@ class ListLabelsView(NoLogin, ListView):
 class CreateLabelView(NoLogin, View):
     def get(self, request):
         return render(request, 'create_label.html')
+
     def post(self, request):
         form = CreateLabelForm(request.POST)
         form.save()
@@ -44,14 +45,17 @@ class UpdateLabelView(NoLogin, SuccessMessageMixin, UpdateView):
 #     success_url = reverse_lazy("list_labels")
 #     success_message = _('Label successfully deleted')
 
-class DeleteLabelView(NoLogin, View):    
+class DeleteLabelView(NoLogin, View):
     def get(self, request, pk):
         return render(request, 'delete_label.html')
 
-    def post(self, request, pk):        
+    def post(self, request, pk):
         label = Label.objects.get(pk=pk)
         if label.labels.exists():
-            messages.error(request, _('The label cannot be deleted because it is in use'))
+            messages.error(
+                request,
+                _('The label cannot be deleted because it is in use')
+            )
             return redirect('list_labels')
         label.delete()
         messages.success(request, _('Label successfully deleted'))

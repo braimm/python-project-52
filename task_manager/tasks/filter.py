@@ -28,7 +28,8 @@
 #         model = Task
 #         fields = ['status', 'executor', 'label', 'self_tasks']
 
-from django_filters import FilterSet, ModelChoiceFilter, BooleanFilter, ModelMultipleChoiceFilter
+from django_filters import FilterSet, ModelChoiceFilter, BooleanFilter
+# from django_filters import ModelMultipleChoiceFilter
 from django import forms
 
 from task_manager.tasks.models import Task
@@ -39,10 +40,26 @@ from django.utils.translation import gettext as _
 
 
 class TasksFilter(FilterSet):
-    status = ModelChoiceFilter(field_name='status', queryset=Status.objects.all(), label=_('Status'))
-    executor = ModelChoiceFilter(field_name='executor', queryset=get_user_model().objects.all(), label=_('Executor'))
-    label = ModelChoiceFilter(field_name='labels', queryset=Label.objects.all(), label=_('Label'))
-    self_tasks = BooleanFilter(field_name='labels', widget=forms.CheckboxInput, method='filter_author', label=_('Only my tasks'))
+    status = ModelChoiceFilter(
+        field_name='status',
+        queryset=Status.objects.all(),
+        label=_('Status')
+    )
+    executor = ModelChoiceFilter(
+        field_name='executor',
+        queryset=get_user_model().objects.all(),
+        label=_('Executor')
+    )
+    label = ModelChoiceFilter(
+        field_name='labels',
+        queryset=Label.objects.all(),
+        label=_('Label')
+    )
+    self_tasks = BooleanFilter(
+        field_name='labels',
+        widget=forms.CheckboxInput,
+        method='filter_author', label=_('Only my tasks')
+    )
 
     def filter_author(self, queryset, name, value):
         attr_user = value

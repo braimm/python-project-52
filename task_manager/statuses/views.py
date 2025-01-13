@@ -12,6 +12,7 @@ from django.utils.translation import gettext as _
 
 # Create your views here.
 
+
 class ListStatusesView(NoLogin, ListView):
     model = Status
     template_name = 'list_statuses.html'
@@ -21,6 +22,7 @@ class ListStatusesView(NoLogin, ListView):
 class CreateStatusView(NoLogin, View):
     def get(self, request):
         return render(request, 'create_status.html')
+
     def post(self, request):
         form = CreateStatusForm(request.POST)
         if form.is_valid():
@@ -44,14 +46,17 @@ class UpdateStatusView(NoLogin, SuccessMessageMixin, UpdateView):
 #     success_url = reverse_lazy("list_statuses")
 #     success_message = _('Status successfully deleted')
 
-class DeleteStatusView(NoLogin, View):    
+class DeleteStatusView(NoLogin, View):
     def get(self, request, pk):
         return render(request, 'delete_status.html')
 
-    def post(self, request, pk):        
+    def post(self, request, pk):
         status = Status.objects.get(pk=pk)
         if status.status.exists():
-            messages.error(request, _('The status cannot be deleted because it is in use'))
+            messages.error(
+                request,
+                _('The status cannot be deleted because it is in use')
+            )
             return redirect('list_statuses')
         status.delete()
         messages.success(request, _('Status successfully deleted'))

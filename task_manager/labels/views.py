@@ -60,4 +60,3 @@ class DeleteLabelView(NoLogin, View):
         label.delete()
         messages.success(request, _('Label successfully deleted'))
         return redirect('list_labels')
-

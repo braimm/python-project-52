@@ -1,18 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
-from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, DetailView, UpdateView
 from task_manager.tasks.models import Task
 from task_manager.statuses.models import Status
 from task_manager.labels.models import Label
 from task_manager.tasks.forms import CreateTaskForm
 from task_manager.ext_mixins import NoLogin
-from django_filters.views import FilterView
 from .filter import TasksFilter
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
@@ -73,6 +69,7 @@ class CreateTaskView(NoLogin, CreateView):
     success_message = _('Task successfully created')
     template_name = 'create_task.html'
     context_object_name = 'task'
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -90,22 +87,25 @@ class UpdateTaskView(NoLogin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy("list_tasks")
     success_message = _('Task successfully updated')
 
-
-
 # class DeleteTaskView(NoLogin, SuccessMessageMixin, DeleteView):
 #     model = Task
 #     template_name = 'delete_task.html'
 #     success_url = reverse_lazy("list_tasks")
 #     success_message = _('Task successfully deleted')
 
-class DeleteTaskView(NoLogin, View):    
+
+class DeleteTaskView(NoLogin, View):
+
     def get(self, request, pk):
         return render(request, 'delete_task.html')
 
-    def post(self, request, pk):        
+    def post(self, request, pk):
         task = Task.objects.get(pk=pk)
         if task.author != request.user:
-            messages.error(request, _('A task can only be deleted by its author'))
+            messages.error(
+                request,
+                _('A task can only be deleted by its author')
+            )
             return redirect('list_tasks')
         task.delete()
         messages.success(request, _('Task successfully deleted'))

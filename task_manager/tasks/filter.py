@@ -67,7 +67,7 @@ class TasksFilter(FilterSet):
             current_user = getattr(self.request, 'user', None)
             return queryset.filter(author=current_user)
         return queryset
-    
+
     class Meta:
         model = Task
         fields = []

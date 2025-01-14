@@ -10,6 +10,7 @@ from django.db.models.deletion import ProtectedError
 from .models import Status
 # Create your tests here.
 
+
 class StatusesTest(TestCase):
     fixtures = ['users.json', 'statuses.json', 'tasks.json', 'labels.json']
     input_status = {'name': 'new_status'}
@@ -21,18 +22,21 @@ class StatusesTest(TestCase):
         self.free_status = Status.objects.get(pk=3)
         self.user = get_user_model().objects.get(pk=1)
 
-
     def test_statuses_list_without_auth(self):
         response = self.client.get(reverse_lazy('list_statuses'))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/login/?next=/statuses/')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
-            expected_message='Вы не авторизованы! Пожалуйста, выполните вход.')
+            expected_message='Вы не авторизованы! Пожалуйста, выполните вход.'
+        )
 
     def test_statuses_list(self):
         self.client.force_login(self.user)
@@ -48,19 +52,26 @@ class StatusesTest(TestCase):
         self.assertRedirects(response, '/login/?next=/statuses/create/')
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
-            expected_message='Вы не авторизованы! Пожалуйста, выполните вход.')
+            expected_message='Вы не авторизованы! Пожалуйста, выполните вход.'
+        )
 
     def test_status_create(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse_lazy('create_status'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='create_status.html')
-        response_post = self.client.post(reverse_lazy('create_status'), self.input_status)
-        new_status= Status.objects.get(pk=4)
+        response_post = self.client.post(
+            reverse_lazy('create_status'),
+            self.input_status
+        )
+        new_status = Status.objects.get(pk=4)
         self.assertTrue(new_status)
         self.assertEqual(new_status.name, self.input_status['name'])
         self.assertEqual(response_post.status_code, 302)
@@ -68,17 +79,22 @@ class StatusesTest(TestCase):
         response = self.client.get(reverse_lazy('list_statuses'))
         statuses_list = response.context['statuses']
         self.assertTrue(len(statuses_list) == 4)
-   
 
     def test_status_update_without_auth(self):
         response_redirect = self.client.get(
             reverse_lazy('update_status', args=[self.status1.pk])
         )
         self.assertEqual(response_redirect.status_code, 302)
-        self.assertRedirects(response_redirect, '/login/?next=/statuses/1/update/')
+        self.assertRedirects(
+            response_redirect,
+            '/login/?next=/statuses/1/update/'
+        )
         messages = list(get_messages(response_redirect.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
@@ -110,10 +126,16 @@ class StatusesTest(TestCase):
             reverse_lazy('delete_status', args=[self.status1.pk])
         )
         self.assertEqual(response_redirect.status_code, 302)
-        self.assertRedirects(response_redirect, '/login/?next=/statuses/1/delete/')
+        self.assertRedirects(
+            response_redirect,
+            '/login/?next=/statuses/1/delete/'
+        )
         messages = list(get_messages(response_redirect.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
@@ -130,7 +152,8 @@ class StatusesTest(TestCase):
         self.assertTrue(count_statuses_before_del == count_statuses_after_del)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
-            expected_message='Невозможно удалить метку, потому что она используется'
+            expected_message='Невозможно удалить метку, \
+                потому что она используется'
         )
 
     def test_free_status_delete(self):
@@ -145,7 +168,9 @@ class StatusesTest(TestCase):
             reverse_lazy('delete_status', args=[self.free_status.pk])
         )
         count_statuses_after_del = len(Status.objects.all())
-        self.assertTrue(count_statuses_after_del == count_statuses_before_del - 1)
+        self.assertTrue(
+            count_statuses_after_del == count_statuses_before_del - 1
+        )
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse_lazy('list_statuses'))
         with self.assertRaises(ObjectDoesNotExist):

@@ -1,10 +1,14 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
-from django.contrib.messages import get_messages, constants as message_constants
+from django.contrib.messages import (
+    get_messages,
+    constants as message_constants
+)
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.deletion import ProtectedError
 # Create your tests here.
+
 
 class UsersTest(TestCase):
     fixtures = ['users.json', 'statuses.json', 'tasks.json', 'labels.json']
@@ -26,7 +30,7 @@ class UsersTest(TestCase):
     def test_users_list(self):
         response = self.client.get(reverse_lazy('list_users'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='list_users.html')        
+        self.assertTemplateUsed(response, template_name='list_users.html')
         users_list = response.context['users']
         self.assertTrue(len(users_list) == 4)
         self.assertEqual(users_list[0].username, 'user1')
@@ -40,7 +44,10 @@ class UsersTest(TestCase):
         self.assertTemplateUsed(response, template_name='create_user.html')
 
         inputform = self.input_user
-        response_post = self.client.post(reverse_lazy('create_user'), inputform)
+        response_post = self.client.post(
+            reverse_lazy('create_user'),
+            inputform
+        )
         self.assertTrue(get_user_model().objects.get(pk=5))
         self.assertEqual(response_post.status_code, 302)
         self.assertRedirects(response_post, reverse_lazy('login'))
@@ -50,17 +57,22 @@ class UsersTest(TestCase):
             reverse_lazy('update_user', args=[self.user1.pk])
         )
         self.assertEqual(response_redirect.status_code, 302)
-        self.assertRedirects(response_redirect, '/login/?next=/users/1/update/')
+        self.assertRedirects(
+            response_redirect,
+            '/login/?next=/users/1/update/'
+        )
         messages = list(get_messages(response_redirect.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
             expected_message='Вы не авторизованы! Пожалуйста, выполните вход.'
         )
-        
-        
+
     def test_another_user_update(self):
         self.client.force_login(self.user2)
         response_redirect = self.client.get(
@@ -70,11 +82,15 @@ class UsersTest(TestCase):
         self.assertRedirects(response_redirect, reverse_lazy('list_users'))
         messages = list(get_messages(response_redirect.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "У вас нет прав для изменения другого пользователя.")
+        self.assertEqual(
+            str(messages[0]),
+            "У вас нет прав для изменения другого пользователя."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
-            expected_message='У вас нет прав для изменения другого пользователя.'
+            expected_message='У вас нет прав для \
+                изменения другого пользователя.'
         )
 
     def test_user_update(self):
@@ -101,14 +117,21 @@ class UsersTest(TestCase):
             reverse_lazy('delete_user', args=[self.user1.pk])
         )
         self.assertEqual(response_redirect.status_code, 302)
-        self.assertRedirects(response_redirect, '/login/?next=/users/1/delete/')
+        self.assertRedirects(
+            response_redirect,
+            '/login/?next=/users/1/delete/'
+        )
         messages = list(get_messages(response_redirect.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Вы не авторизованы! Пожалуйста, выполните вход.")
+        self.assertEqual(
+            str(messages[0]),
+            "Вы не авторизованы! Пожалуйста, выполните вход."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
-            expected_message='Вы не авторизованы! Пожалуйста, выполните вход.'
+            expected_message='Вы не авторизованы! \
+                Пожалуйста, выполните вход.'
         )
 
     def test_another_user_delete(self):
@@ -120,11 +143,15 @@ class UsersTest(TestCase):
         self.assertRedirects(response_redirect, reverse_lazy('list_users'))
         messages = list(get_messages(response_redirect.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "У вас нет прав для изменения другого пользователя.")
+        self.assertEqual(
+            str(messages[0]),
+            "У вас нет прав для изменения другого пользователя."
+        )
         self.assertEqual(messages[0].level, message_constants.ERROR)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
-            expected_message='У вас нет прав для изменения другого пользователя.')
+            expected_message='У вас нет прав для изменения \
+                другого пользователя.')
 
     def test_free_user_delete(self):
         self.client.force_login(self.user4)
@@ -154,5 +181,6 @@ class UsersTest(TestCase):
         self.assertTrue(count_users_before_del == count_users_after_del)
         self.assertRaisesMessage(
             expected_exception=ProtectedError,
-            expected_message='Невозможно удалить пользователя, потому что он используется'
+            expected_message='Невозможно удалить пользователя, \
+                потому что он используется'
         )

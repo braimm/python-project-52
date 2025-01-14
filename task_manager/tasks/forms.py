@@ -11,7 +11,6 @@ class CreateTaskForm(forms.ModelForm):
     # executor = forms.CharField(max_length=50, required=True)
     # labels = forms.CharField(max_length=50)
 
-
     class Meta:
         model = Task
         fields = ['name', 'description', 'status', 'executor', 'labels']

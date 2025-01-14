@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from django.views.generic import ListView, UpdateView
 from task_manager.statuses.models import Status
 from task_manager.statuses.forms import CreateStatusForm
 from task_manager.ext_mixins import NoLogin

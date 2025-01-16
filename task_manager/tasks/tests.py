@@ -53,9 +53,6 @@ class TaskTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='list_tasks.html')
         tasks_list = response.context['filter']
-        # print('************************')
-        # print(tasks_list.queryset)'nj ul
-        # print('************************')
         count_tasks_bf_create = len(Task.objects.all())
         self.assertTrue(len(tasks_list.queryset) == count_tasks_bf_create)
 

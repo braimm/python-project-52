@@ -82,7 +82,7 @@ class UpdateUserView(NoLogin, UpdateView):
         if is_conflict_username:
             form.add_error(
                 'username',
-                "Пользователь с таким именем уже существует."
+                _('A user with this name already exists.')
             )
 
         return render(

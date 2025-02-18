@@ -19,3 +19,9 @@ lint:
 
 test:
 	poetry run python manage.py test
+
+translate:
+	poetry run python manage.py makemessages -l ru
+
+compile_translate:
+	poetry run python manage.py compilemessages --ignore=.venv

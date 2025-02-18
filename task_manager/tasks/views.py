@@ -104,16 +104,16 @@ class DeleteTaskView(NoLogin, View):
 
     def get(self, request, pk):
         task = Task.objects.get(pk=pk)
-        return render(request, 'delete_task.html', {"task": task})
-
-    def post(self, request, pk):
-        task = Task.objects.get(pk=pk)
         if task.author != request.user:
             messages.error(
                 request,
                 _('A task can only be deleted by its author')
             )
             return redirect('list_tasks')
+        return render(request, 'delete_task.html', {"task": task})
+
+    def post(self, request, pk):
+        task = Task.objects.get(pk=pk)
         task.delete()
         messages.success(request, _('Task successfully deleted'))
         return redirect('list_tasks')

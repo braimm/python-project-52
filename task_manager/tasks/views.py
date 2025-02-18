@@ -65,7 +65,7 @@ class ListTasksView(NoLogin, View):
         # )
 
 
-class CreateTaskView(NoLogin,  SuccessMessageMixin, CreateView):
+class CreateTaskView(NoLogin, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
     template_name = 'create_task.html'
     context_object_name = 'task'

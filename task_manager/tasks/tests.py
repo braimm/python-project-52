@@ -167,7 +167,7 @@ class TaskTest(TestCase):
         task_another_user = self.task1
         self.client.force_login(user)
         count_tasks_before_del = len(Task.objects.all())
-        self.client.post(
+        self.client.get(
             reverse_lazy('delete_task', args=[task_another_user.pk])
         )
         count_tasks_after_del = len(Task.objects.all())

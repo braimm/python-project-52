@@ -103,7 +103,8 @@ class UpdateTaskView(NoLogin, SuccessMessageMixin, UpdateView):
 class DeleteTaskView(NoLogin, View):
 
     def get(self, request, pk):
-        return render(request, 'delete_task.html')
+        task = Task.objects.get(pk=pk)
+        return render(request, 'delete_task.html', {"task": task})
 
     def post(self, request, pk):
         task = Task.objects.get(pk=pk)

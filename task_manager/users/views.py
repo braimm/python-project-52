@@ -21,7 +21,6 @@ class ListUsersView(ListView):
     def get(self, request):
         # users = get_user_model().objects.all()
         users = User.objects.all()
-        print(users)
         return render(request, 'list_users.html', {'users': users})
 
 

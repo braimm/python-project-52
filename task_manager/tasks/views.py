@@ -72,7 +72,12 @@ class CreateTaskView(NoLogin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        print(self.request.user)
         return super().form_valid(form)
+
+    # def get(self, request):
+    #     form = CreateTaskForm()
+    #     return render(request, 'create_task.html', {'form': form})
 
 
 class PageTaskView(NoLogin, DetailView):

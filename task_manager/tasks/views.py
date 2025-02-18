@@ -62,17 +62,15 @@ class ListTasksView(NoLogin, View):
         )
 
 
-class CreateTaskView(NoLogin, CreateView):
+class CreateTaskView(NoLogin,  SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
-    context_object_name = 'test'
-    success_url = reverse_lazy('list_tasks')
-    success_message = _('Task successfully created')
     template_name = 'create_task.html'
     context_object_name = 'task'
+    success_url = reverse_lazy('list_tasks')
+    success_message = _('Task successfully created')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        print(self.request.user)
         return super().form_valid(form)
 
     # def get(self, request):

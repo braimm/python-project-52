@@ -49,4 +49,4 @@ class LogoutUserView(View):
     def post(self, request):
         logout(request)
         messages.info(request, _('You are logged out'))
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('start_page'))

@@ -28,13 +28,14 @@
                 {% translate 'Required field. No more than 150 characters. Only letters, numbers and symbols @/./+/-/_.' %}
             </div>
         </div>
+<!-- ********************************************************************************************** -->
         <div class="mb-3">
-            <label class="form-label" for="id_password">{% translate 'Password' %}</label>
-            {% if form.errors.password %}
-                <input type="password" name="password" autocomplete="new-password" class="form-control is-invalid" placeholder="{% translate 'Password' %}" aria-invalid="true" aria-describedby="id_password_helptext" id="id_password">
-                <div class="invalid-feedback">{{ form.errors.password.0 }}</div>
+            <label class="form-label" for="id_password1">{% translate 'Password' %}</label>
+            {% if form.errors.password1 %}
+                <input type="password" name="password1" autocomplete="new-password" class="form-control is-invalid" placeholder="{% translate 'Password' %}" aria-invalid="true" aria-describedby="id_password1_helptext" id="id_password1">
+                <div class="invalid-feedback">{{ form.errors.password1.0 }}</div>
             {% else %}
-                <input type="password" name="password" autocomplete="new-password" class="form-control" placeholder="{% translate 'Password' %}" aria-describedby="id_password_helptext" id="id_password">
+                <input type="password" name="password1" autocomplete="new-password" class="form-control" placeholder="{% translate 'Password' %}" aria-describedby="id_password1_helptext" id="id_password1">
             {% endif %}
             <div class="form-text">
                 <ul>
@@ -42,6 +43,7 @@
                 </ul>
             </div>
         </div>
+<!-- ********************************************************************************************** -->
         <div class="mb-3">
             <label class="form-label" for="id_password2">{% translate 'Password Confirmation' %}</label>
             {% if form.errors.password2 %}

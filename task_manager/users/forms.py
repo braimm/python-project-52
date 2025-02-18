@@ -12,7 +12,7 @@ class RegisterUserForm(forms.ModelForm):
         required=True,
         label=_('User name')
     )
-    password = forms.CharField(
+    password1 = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput
     )
@@ -23,11 +23,11 @@ class RegisterUserForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ['first_name', 'last_name', 'username', 'password']
+        fields = ['first_name', 'last_name', 'username', 'password1']
 
     def clean_password2(self):
         cd = self.cleaned_data
-        if cd.get('password') and cd.get('password') != cd.get('password2'):
+        if cd.get('password1') and cd.get('password1') != cd.get('password2'):
             raise forms.ValidationError("Введенные пароли не совпадают.")
         if len(cd['password2']) < 3:
             raise forms.ValidationError(
@@ -45,7 +45,7 @@ class UpdateUserForm(forms.Form):
         required=True,
         label=_('User name')
     )
-    password = forms.CharField(
+    password1 = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput
     )
@@ -65,7 +65,7 @@ class UpdateUserForm(forms.Form):
 
     def clean_password2(self):
         cd = self.cleaned_data
-        if cd.get('password') and cd.get('password') != cd.get('password2'):
+        if cd.get('password1') and cd.get('password1') != cd.get('password2'):
             raise forms.ValidationError("Введенные пароли не совпадают.")
         if len(cd['password2']) < 3:
             raise forms.ValidationError(

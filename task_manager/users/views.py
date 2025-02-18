@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView
 from django.views import View
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.contrib import messages
 # from django.contrib.messages.views import SuccessMessageMixin
 from .forms import RegisterUserForm, UpdateUserForm
@@ -17,6 +18,12 @@ class ListUsersView(ListView):
     template_name = 'list_users.html'
     context_object_name = 'users'
 
+    def get(self, request):
+        # users = get_user_model().objects.all()
+        users = User.objects.all()
+        print(users)
+        return render(request, 'list_users.html', {'users': users})
+
 
 class CreateUserView(View):
 
@@ -27,7 +34,7 @@ class CreateUserView(View):
         form = RegisterUserForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
+            user.set_password(form.cleaned_data['password1'])
             user.save()
             messages.success(request, _('User successfully registered'))
             return redirect('login')
@@ -68,7 +75,7 @@ class UpdateUserView(NoLogin, UpdateView):
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.username = form.cleaned_data['username']
-            user.set_password(form.cleaned_data['password'])
+            user.set_password(form.cleaned_data['password1'])
             user.save()
             messages.success(request, _('User successfully updated'))
             return redirect('list_users')

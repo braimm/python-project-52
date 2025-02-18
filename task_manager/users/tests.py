@@ -16,7 +16,7 @@ class UsersTest(TestCase):
         'first_name': 'firstname test input user',
         'last_name': 'lastname test input user',
         'username': 'inputusername',
-        'password': 'Qqq123',
+        'password1': 'Qqq123',
         'password2': 'Qqq123',
         }
 

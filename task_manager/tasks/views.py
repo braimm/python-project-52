@@ -5,12 +5,12 @@ from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import CreateView, DetailView, UpdateView
 from task_manager.tasks.models import Task
-from task_manager.statuses.models import Status
-from task_manager.labels.models import Label
+# from task_manager.statuses.models import Status
+# from task_manager.labels.models import Label
 from task_manager.tasks.forms import CreateTaskForm
 from task_manager.ext_mixins import NoLogin
 from .filter import TasksFilter
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
 
 
@@ -42,24 +42,27 @@ from django.utils.translation import gettext as _
 #         #return render(request, 'create_status.html')
 
 class ListTasksView(NoLogin, View):
-    template = 'list_tasks.html'
-
     def get(self, request):
         tasks = Task.objects.all()
-        statuses = Status.objects.all()
-        executors = get_user_model().objects.all()
-        labels = Label.objects.all()
+        # statuses = Status.objects.all()
+        # executors = get_user_model().objects.all()
+        # labels = Label.objects.all()
         tasks_filtered = TasksFilter(
             request.GET, queryset=tasks, request=request
         )
         return render(
-            request, self.template, {
-                'statuses': statuses,
-                'executors': executors,
-                'labels': labels,
+            request, 'list_tasks.html', {
+                # 'statuses': statuses,
+                # 'executors': executors,
+                # 'labels': labels,
                 'filter': tasks_filtered
             }
         )
+        # return render(
+        #     request, 'list_tasks.html', {
+        #         'filter': tasks_filtered
+        #     }
+        # )
 
 
 class CreateTaskView(NoLogin,  SuccessMessageMixin, CreateView):

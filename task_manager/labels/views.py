@@ -7,7 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, UpdateView
 from task_manager.labels.models import Label
 from task_manager.labels.forms import CreateLabelForm
-from task_manager.ext_mixins import NoLogin
+from task_manager.mixins import NoLogin
 from django.utils.translation import gettext as _
 
 

@@ -7,7 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, UpdateView
 from task_manager.statuses.models import Status
 from task_manager.statuses.forms import CreateStatusForm
-from task_manager.ext_mixins import NoLogin
+from task_manager.mixins import NoLogin
 from django.utils.translation import gettext as _
 
 # Create your views here.

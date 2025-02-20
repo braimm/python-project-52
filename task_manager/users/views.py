@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from .forms import RegisterUserForm, UpdateUserForm
 from django.utils.translation import gettext as _
-from task_manager.ext_mixins import NoLogin
+from task_manager.mixins import NoLogin
 
 
 # Create your views here.

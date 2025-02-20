@@ -11,6 +11,10 @@ dev:
 migrate:
 	poetry run python manage.py migrate
 
+build:
+	make install
+	make migrate
+
 lint:
 	poetry run flake8 task_manager
 

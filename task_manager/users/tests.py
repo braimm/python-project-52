@@ -30,7 +30,10 @@ class UsersTest(TestCase):
     def test_users_list(self):
         response = self.client.get(reverse_lazy('list_users'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='list_users.html')
+        self.assertTemplateUsed(
+            response, template_name='users/list_users.html'
+        )
+
         users_list = response.context['users']
         self.assertTrue(len(users_list) == 4)
         self.assertEqual(users_list[0].username, 'user1')
@@ -41,7 +44,9 @@ class UsersTest(TestCase):
     def test_user_create(self):
         response = self.client.get(reverse_lazy('create_user'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='create_user.html')
+        self.assertTemplateUsed(
+            response, template_name='users/create_user.html'
+        )
 
         inputform = self.input_user
         response_post = self.client.post(
@@ -99,7 +104,10 @@ class UsersTest(TestCase):
             reverse_lazy('update_user', args=[self.user1.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='update_user.html')
+        self.assertTemplateUsed(
+            response, template_name='users/update_user.html'
+        )
+
         inputform = self.input_user
         response = self.client.post(
             reverse_lazy('update_user', args=[self.user1.pk]),
@@ -159,7 +167,10 @@ class UsersTest(TestCase):
             reverse_lazy('delete_user', args=[self.user4.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='delete_user.html')
+        self.assertTemplateUsed(
+            response, template_name='users/delete_user.html'
+        )
+
         count_users_before_del = len(get_user_model().objects.all())
         response = self.client.post(
             reverse_lazy('delete_user', args=[self.user4.pk])

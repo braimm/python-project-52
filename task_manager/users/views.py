@@ -13,14 +13,14 @@ from task_manager.mixins import NoLogin
 
 class ListUsersView(ListView):
     model = get_user_model()
-    template_name = 'list_users.html'
+    template_name = 'users/list_users.html'
     context_object_name = 'users'
 
 
 class CreateUserView(View):
 
     def get(self, request):
-        return render(request, 'create_user.html')
+        return render(request, 'users/create_user.html')
 
     def post(self, request):
         form = RegisterUserForm(request.POST)
@@ -33,7 +33,7 @@ class CreateUserView(View):
         username = request.POST.get('username')
         return render(
             request,
-            'create_user.html',
+            'users/create_user.html',
             {'form': form, 'username': username}
         )
 
@@ -42,7 +42,7 @@ class UpdateUserView(NoLogin, UpdateView):
     model = get_user_model()
     form_class = RegisterUserForm
     success_url = reverse_lazy("list_users")
-    template_name = 'update_user.html'
+    template_name = 'users/update_user.html'
 
     def get(self, request, pk):
         if pk != request.user.pk:
@@ -79,7 +79,7 @@ class UpdateUserView(NoLogin, UpdateView):
 
         return render(
             request,
-            'update_user.html',
+            'users/update_user.html',
             {'form': form, 'username': input_username}
         )
 
@@ -92,7 +92,7 @@ class DeleteUserView(NoLogin, View):
                 _('You do not have permission to modify another user.')
             )
             return redirect('list_users')
-        return render(request, 'delete_user.html')
+        return render(request, 'users/delete_user.html')
 
     def post(self, request, pk):
         user = get_user_model().objects.get(pk=pk)

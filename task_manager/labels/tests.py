@@ -41,7 +41,10 @@ class LabelsTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse_lazy('list_labels'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='list_labels.html')
+        self.assertTemplateUsed(
+            response, template_name='labels/list_labels.html'
+        )
+
         labels_list = response.context['labels']
         self.assertTrue(len(labels_list) == 3)
 
@@ -64,7 +67,10 @@ class LabelsTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse_lazy('create_label'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='create_label.html')
+        self.assertTemplateUsed(
+            response, template_name='labels/create_label.html'
+        )
+
         response_post = self.client.post(
             reverse_lazy('create_label'),
             self.input_label
@@ -108,7 +114,10 @@ class LabelsTest(TestCase):
             reverse_lazy('update_label', args=[self.label1.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='update_label.html')
+        self.assertTemplateUsed(
+            response, template_name='labels/update_label.html'
+        )
+
         inputform = self.input_label
         response = self.client.post(
             reverse_lazy('update_label', args=[self.label1.pk]),
@@ -146,7 +155,10 @@ class LabelsTest(TestCase):
             reverse_lazy('delete_label', args=[self.free_label.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='delete_label.html')
+        self.assertTemplateUsed(
+            response, template_name='labels/delete_label.html'
+        )
+
         count_labels_before_del = len(Label.objects.all())
         response = self.client.post(
             reverse_lazy('delete_label', args=[self.free_label.pk])

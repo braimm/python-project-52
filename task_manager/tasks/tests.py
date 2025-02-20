@@ -51,7 +51,10 @@ class TaskTest(TestCase):
         self.client.force_login(user)
         response = self.client.get(reverse_lazy('list_tasks'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='list_tasks.html')
+        self.assertTemplateUsed(
+            response, template_name='tasks/list_tasks.html'
+        )
+
         tasks_list = response.context['filter']
         count_tasks_bf_create = len(Task.objects.all())
         self.assertTrue(len(tasks_list.queryset) == count_tasks_bf_create)
@@ -77,7 +80,9 @@ class TaskTest(TestCase):
         self.client.force_login(user)
         response = self.client.get(reverse_lazy('create_task'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='create_task.html')
+        self.assertTemplateUsed(
+            response, template_name='tasks/create_task.html'
+        )
 
         count_tasks_bf_create = len(Task.objects.all())
         response_post = self.client.post(
@@ -130,7 +135,10 @@ class TaskTest(TestCase):
             reverse_lazy('update_task', args=[self.task1.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='update_task.html')
+        self.assertTemplateUsed(
+            response, template_name='tasks/update_task.html'
+        )
+
         inputform = self.input_task
         response = self.client.post(
             reverse_lazy('update_task', args=[self.task1.pk]),
@@ -185,7 +193,10 @@ class TaskTest(TestCase):
             reverse_lazy('delete_task', args=[self_task.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='delete_task.html')
+        self.assertTemplateUsed(
+            response, template_name='tasks/delete_task.html'
+        )
+
         count_tasks_before_del = len(Task.objects.all())
         response = self.client.post(
             reverse_lazy('delete_task', args=[self_task.pk])

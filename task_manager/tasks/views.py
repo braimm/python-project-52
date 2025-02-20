@@ -21,7 +21,7 @@ class ListTasksView(NoLogin, View):
             request.GET, queryset=tasks, request=request
         )
         return render(
-            request, 'list_tasks.html', {
+            request, 'tasks/list_tasks.html', {
                 'filter': tasks_filtered
             }
         )
@@ -29,7 +29,7 @@ class ListTasksView(NoLogin, View):
 
 class CreateTaskView(NoLogin, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
-    template_name = 'create_task.html'
+    template_name = 'tasks/create_task.html'
     context_object_name = 'task'
     success_url = reverse_lazy('list_tasks')
     success_message = _('Task successfully created')
@@ -41,13 +41,13 @@ class CreateTaskView(NoLogin, SuccessMessageMixin, CreateView):
 
 class PageTaskView(NoLogin, DetailView):
     model = Task
-    template_name = 'page_task.html'
+    template_name = 'tasks/page_task.html'
 
 
 class UpdateTaskView(NoLogin, SuccessMessageMixin, UpdateView):
     model = Task
     form_class = CreateTaskForm
-    template_name = 'update_task.html'
+    template_name = 'tasks/update_task.html'
     success_url = reverse_lazy("list_tasks")
     success_message = _('Task successfully updated')
 
@@ -62,7 +62,7 @@ class DeleteTaskView(NoLogin, View):
                 _('A task can only be deleted by its author')
             )
             return redirect('list_tasks')
-        return render(request, 'delete_task.html', {"task": task})
+        return render(request, 'tasks/delete_task.html', {"task": task})
 
     def post(self, request, pk):
         task = Task.objects.get(pk=pk)

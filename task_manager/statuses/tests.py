@@ -42,7 +42,10 @@ class StatusesTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse_lazy('list_statuses'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='list_statuses.html')
+        self.assertTemplateUsed(
+            response, template_name='statuses/list_statuses.html'
+        )
+
         labels_list = response.context['statuses']
         self.assertTrue(len(labels_list) == 3)
 
@@ -66,7 +69,10 @@ class StatusesTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse_lazy('create_status'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='create_status.html')
+        self.assertTemplateUsed(
+            response, template_name='statuses/create_status.html'
+        )
+
         response_post = self.client.post(
             reverse_lazy('create_status'),
             self.input_status
@@ -110,7 +116,10 @@ class StatusesTest(TestCase):
             reverse_lazy('update_status', args=[self.status1.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='update_status.html')
+        self.assertTemplateUsed(
+            response, template_name='statuses/update_status.html'
+        )
+
         inputform = self.input_status
         response = self.client.post(
             reverse_lazy('update_status', args=[self.status1.pk]),
@@ -162,7 +171,10 @@ class StatusesTest(TestCase):
             reverse_lazy('delete_status', args=[self.free_status.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='delete_status.html')
+        self.assertTemplateUsed(
+            response, template_name='statuses/delete_status.html'
+        )
+
         count_statuses_before_del = len(Status.objects.all())
         response = self.client.post(
             reverse_lazy('delete_status', args=[self.free_status.pk])

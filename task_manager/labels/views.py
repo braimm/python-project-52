@@ -16,13 +16,13 @@ from django.utils.translation import gettext as _
 
 class ListLabelsView(NoLogin, ListView):
     model = Label
-    template_name = 'list_labels.html'
+    template_name = 'labels/list_labels.html'
     context_object_name = 'labels'
 
 
 class CreateLabelView(NoLogin, View):
     def get(self, request):
-        return render(request, 'create_label.html')
+        return render(request, 'labels/create_label.html')
 
     def post(self, request):
         form = CreateLabelForm(request.POST)
@@ -34,14 +34,14 @@ class CreateLabelView(NoLogin, View):
 class UpdateLabelView(NoLogin, SuccessMessageMixin, UpdateView):
     model = Label
     form_class = CreateLabelForm
-    template_name = 'update_label.html'
+    template_name = 'labels/update_label.html'
     success_url = reverse_lazy("list_labels")
     success_message = _('Label successfully updated')
 
 
 class DeleteLabelView(NoLogin, View):
     def get(self, request, pk):
-        return render(request, 'delete_label.html')
+        return render(request, 'labels/delete_label.html')
 
     def post(self, request, pk):
         label = Label.objects.get(pk=pk)

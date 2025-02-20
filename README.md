@@ -1,6 +1,6 @@
 ### Tests and linter status:
 [![Actions Status](https://github.com/braimm/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/braimm/python-project-52/actions)
-[![Github Actions Status](https://github.com/braimm/python-project-52/workflows/django-ci.yml/badge.svg)](https://github.com/braimm/python-project-52/actions)
+[![Github Actions Status](https://github.com/braimm/python-project-52/workflows/pyci.yml/badge.svg)](https://github.com/braimm/python-project-52/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/305890f442c11e7f44ff/maintainability)](https://codeclimate.com/github/braimm/python-project-52/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/305890f442c11e7f44ff/test_coverage)](https://codeclimate.com/github/braimm/python-project-52/test_coverage)
 

@@ -4,6 +4,9 @@ on:
   - push
   - pull_request
 
+env:
+  SECRET_KEY: secret_key
+
 jobs:
   test:
     runs-on: ubuntu-latest

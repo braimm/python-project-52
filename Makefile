@@ -25,3 +25,10 @@ translate:
 
 compile_translate:
 	poetry run python manage.py compilemessages --ignore=.venv
+
+test-coverage-report:
+	poetry run coverage run --source='.' manage.py test
+	coverage xml -o coverage.xml
+
+coverage:
+	poetry run coverage report

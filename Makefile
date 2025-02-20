@@ -14,18 +14,20 @@ migrate:
 lint:
 	poetry run flake8 task_manager
 
-test:
-	poetry run python3 manage.py test
-
 translate:
 	poetry run python manage.py makemessages -l ru
 
-compile_translate:
+compile-translate:
 	poetry run python manage.py compilemessages --ignore=.venv
 
-test-coverage-report:
+test:
+	poetry run python3 manage.py test
+
+check-coverage:
 	poetry run coverage run --source='.' manage.py test
+
+coverage-report:
 	poetry run coverage xml -o coverage.xml
 
-coverage:
+coverage-view:
 	poetry run coverage report

@@ -39,12 +39,6 @@ class UpdateLabelView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Label successfully updated')
 
 
-# class DeleteLabelView(NoLogin, SuccessMessageMixin, DeleteView):
-#     model = Label
-#     template_name = 'delete_label.html'
-#     success_url = reverse_lazy("list_labels")
-#     success_message = _('Label successfully deleted')
-
 class DeleteLabelView(NoLogin, View):
     def get(self, request, pk):
         return render(request, 'delete_label.html')

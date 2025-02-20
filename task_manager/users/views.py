@@ -3,9 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView
 from django.views import View
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.contrib import messages
-# from django.contrib.messages.views import SuccessMessageMixin
 from .forms import RegisterUserForm, UpdateUserForm
 from django.utils.translation import gettext as _
 from task_manager.ext_mixins import NoLogin
@@ -17,11 +15,6 @@ class ListUsersView(ListView):
     model = get_user_model()
     template_name = 'list_users.html'
     context_object_name = 'users'
-
-    def get(self, request):
-        # users = get_user_model().objects.all()
-        users = User.objects.all()
-        return render(request, 'list_users.html', {'users': users})
 
 
 class CreateUserView(View):

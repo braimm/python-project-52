@@ -17,7 +17,6 @@ Including another URLconf
 from django.urls import path
 from task_manager.labels import views
 
-# app_name = "users"
 
 urlpatterns = [
     path('', views.ListLabelsView.as_view(), name='list_labels'),

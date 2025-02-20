@@ -4,11 +4,6 @@ from django.utils.translation import gettext as _
 
 
 class CreateTaskForm(forms.ModelForm):
-    # name = forms.CharField(max_length=50, required=True)
-    # description = forms.CharField(max_length=1000)
-    # status = forms.CharField(max_length=50, required=True)
-    # executor = forms.CharField(max_length=50, required=True)
-    # labels = forms.CharField(max_length=50)
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['executor'].label_from_instance = \

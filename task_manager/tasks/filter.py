@@ -1,37 +1,5 @@
-# from django_filters import FilterSet
-# from django_filters import ChoiceFilter, BooleanFilter
-
-# from django import forms
-# from .models import Task
-# from task_manager.labels.models import Label
-
-# class TasksFilter(FilterSet):
-#     label = ChoiceFilter(
-#         choices=lambda: [(label.id, label.name)
-#                          for label
-#                          in Label.objects.all()],
-#         field_name='labels',
-#         label= 'Метки',
-#     )
-#     self_tasks = BooleanFilter(widget=forms.CheckboxInput,
-#                                method='filter_author',
-#                                label= 'Только свои задачи')
-
-#     def filter_author(self, queryset, *args, **kwargs):
-#         author = args[-1]
-#         if author:
-#             author = getattr(self.request, 'user', None)
-#             return queryset.filter(author=author)
-#         return queryset
-
-#     class Meta:
-#         model = Task
-#         fields = ['status', 'executor', 'label', 'self_tasks']
-
 from django_filters import FilterSet, ModelChoiceFilter, BooleanFilter
-# from django_filters import ModelMultipleChoiceFilter
 from django import forms
-
 from task_manager.tasks.models import Task
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status

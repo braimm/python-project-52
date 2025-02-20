@@ -16,53 +16,18 @@ from django.utils.translation import gettext as _
 
 # Create your views here.
 
-# class ListTasksView(ListView, FilterView):
-#     model = Task
-#     template_name = 'list_tasks.html'
-#     filterset_class = TasksFilter
-#     context_object_name = 'tasks'
-
-# def ListTasksView(request):
-#     f = TasksFilter(request.GET, queryset=Task.objects.all())
-#     return render(request, 'list_tasks.html', {'filter': f})
-
-
-# class CreateTaskView(View):
-#     def get(self, request):
-#         return render(request, 'create_task.html')
-#     def post(self, request):
-#         form = CreateTaskForm(request.POST)
-#         print(form)
-#         print(form.is_valid())
-#         print(form.errors)
-#         #if form.is_valid():
-#         form.save()
-#         messages.success(request, 'Задача успешно создана')
-#         return HttpResponseRedirect(reverse("list_tasks"))
-#         #return render(request, 'create_status.html')
 
 class ListTasksView(NoLogin, View):
     def get(self, request):
         tasks = Task.objects.all()
-        # statuses = Status.objects.all()
-        # executors = get_user_model().objects.all()
-        # labels = Label.objects.all()
         tasks_filtered = TasksFilter(
             request.GET, queryset=tasks, request=request
         )
         return render(
             request, 'list_tasks.html', {
-                # 'statuses': statuses,
-                # 'executors': executors,
-                # 'labels': labels,
                 'filter': tasks_filtered
             }
         )
-        # return render(
-        #     request, 'list_tasks.html', {
-        #         'filter': tasks_filtered
-        #     }
-        # )
 
 
 class CreateTaskView(NoLogin, SuccessMessageMixin, CreateView):
@@ -76,10 +41,6 @@ class CreateTaskView(NoLogin, SuccessMessageMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-    # def get(self, request):
-    #     form = CreateTaskForm()
-    #     return render(request, 'create_task.html', {'form': form})
-
 
 class PageTaskView(NoLogin, DetailView):
     model = Task
@@ -92,12 +53,6 @@ class UpdateTaskView(NoLogin, SuccessMessageMixin, UpdateView):
     template_name = 'update_task.html'
     success_url = reverse_lazy("list_tasks")
     success_message = _('Task successfully updated')
-
-# class DeleteTaskView(NoLogin, SuccessMessageMixin, DeleteView):
-#     model = Task
-#     template_name = 'delete_task.html'
-#     success_url = reverse_lazy("list_tasks")
-#     success_message = _('Task successfully deleted')
 
 
 class DeleteTaskView(NoLogin, View):

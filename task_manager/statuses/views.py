@@ -40,12 +40,6 @@ class UpdateStatusView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Status successfully updated')
 
 
-# class DeleteStatusView(NoLogin, SuccessMessageMixin, DeleteView):
-#     model = Status
-#     template_name = 'delete_status.html'
-#     success_url = reverse_lazy("list_statuses")
-#     success_message = _('Status successfully deleted')
-
 class DeleteStatusView(NoLogin, View):
     def get(self, request, pk):
         return render(request, 'delete_status.html')

@@ -8,9 +8,6 @@ start:
 dev:
 	poetry run python manage.py runserver
 
-build:
-	./build.sh
-
 migrate:
 	poetry run python manage.py migrate
 
@@ -18,7 +15,7 @@ lint:
 	poetry run flake8 task_manager
 
 test:
-	poetry run python manage.py test
+	poetry run python3 manage.py test
 
 translate:
 	poetry run python manage.py makemessages -l ru

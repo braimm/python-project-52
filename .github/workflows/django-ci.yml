@@ -1,4 +1,4 @@
-name: django-test
+name: django-ci
 
 on:
   - push

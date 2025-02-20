@@ -28,7 +28,7 @@ compile_translate:
 
 test-coverage-report:
 	poetry run coverage run --source='.' manage.py test
-	coverage xml -o coverage.xml
+	poetry run coverage xml -o coverage.xml
 
 coverage:
 	poetry run coverage report

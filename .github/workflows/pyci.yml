@@ -4,18 +4,31 @@ on:
   - push
   - pull_request
 
-env:
-  SECRET_KEY: ${{ secrets.SECRET_KEY }}
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.11]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U user -d test_db"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -25,6 +38,12 @@ jobs:
         run: |
           pip install poetry
           make install
+
+      - name: Run migrations
+        env:
+          DATABASE_URL: postgres://user:password@localhost:5432/test_db
+        run: python manage.py migrate
+
       - name: Run tests
         run: |
           make test

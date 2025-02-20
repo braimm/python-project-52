@@ -1,4 +1,4 @@
-name: django-ci
+name: Python CI
 
 on:
   - push
@@ -20,3 +20,6 @@ jobs:
         run: |
           pip install poetry
           make install
+      - name: Run linter
+        run: |
+          make lint

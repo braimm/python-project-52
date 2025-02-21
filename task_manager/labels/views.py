@@ -29,7 +29,6 @@ class CreateLabelView(NoLogin, View, SuccessMessageMixin):
     def post(self, request):
         form = CreateLabelForm(request.POST)
         form.save()
-        # messages.success(request, _('Label successfully created'))
         return HttpResponseRedirect(reverse("list_labels"))
 
 
@@ -56,5 +55,4 @@ class DeleteLabelView(NoLogin, View, SuccessMessageMixin):
             )
             return redirect('list_labels')
         label.delete()
-        # messages.success(request, _('Label successfully deleted'))
         return redirect('list_labels')

@@ -68,5 +68,4 @@ class DeleteTaskView(NoLogin, View, SuccessMessageMixin):
     def post(self, request, pk):
         task = Task.objects.get(pk=pk)
         task.delete()
-        # messages.success(request, _('Task successfully deleted'))
         return redirect('list_tasks')

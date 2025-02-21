@@ -30,7 +30,6 @@ class CreateUserView(View, SuccessMessageMixin):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password1'])
             user.save()
-            # messages.success(request, _('User successfully registered'))
             return redirect('login')
         username = request.POST.get('username')
         return render(
@@ -72,7 +71,6 @@ class UpdateUserView(NoLogin, UpdateView, SuccessMessageMixin):
             user.username = form.cleaned_data['username']
             user.set_password(form.cleaned_data['password1'])
             user.save()
-            # messages.success(request, _('User successfully updated'))
             return redirect('list_users')
         if is_conflict_username:
             form.add_error(
@@ -108,5 +106,4 @@ class DeleteUserView(NoLogin, View, SuccessMessageMixin):
             )
             return redirect('list_users')
         user.delete()
-        # messages.success(request, _('User successfully delete'))
         return redirect('list_users')

@@ -19,9 +19,7 @@ class ListStatusesView(NoLogin, ListView):
     context_object_name = 'statuses'
 
 
-class CreateStatusView(NoLogin, View, SuccessMessageMixin):
-    success_message = _('Status successfully created')
-
+class CreateStatusView(NoLogin, View):
     def get(self, request):
         return render(request, 'statuses/create_status.html')
 
@@ -42,9 +40,7 @@ class UpdateStatusView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Status successfully updated')
 
 
-class DeleteStatusView(NoLogin, View, SuccessMessageMixin):
-    success_message = _('Status successfully deleted')
-
+class DeleteStatusView(NoLogin, View):
     def get(self, request, pk):
         return render(request, 'statuses/delete_status.html')
 

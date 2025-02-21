@@ -20,9 +20,7 @@ class ListLabelsView(NoLogin, ListView):
     context_object_name = 'labels'
 
 
-class CreateLabelView(NoLogin, View, SuccessMessageMixin):
-    success_message = _('Label successfully created')
-
+class CreateLabelView(NoLogin, View):
     def get(self, request):
         return render(request, 'labels/create_label.html')
 
@@ -41,9 +39,7 @@ class UpdateLabelView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Label successfully updated')
 
 
-class DeleteLabelView(NoLogin, View, SuccessMessageMixin):
-    success_message = _('Label successfully deleted')
-
+class DeleteLabelView(NoLogin, View):
     def get(self, request, pk):
         return render(request, 'labels/delete_label.html')
 

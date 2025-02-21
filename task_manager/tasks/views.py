@@ -52,9 +52,7 @@ class UpdateTaskView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Task successfully updated')
 
 
-class DeleteTaskView(NoLogin, View, SuccessMessageMixin):
-    success_message = _('Task successfully deleted')
-
+class DeleteTaskView(NoLogin, View):
     def get(self, request, pk):
         task = Task.objects.get(pk=pk)
         if task.author != request.user:

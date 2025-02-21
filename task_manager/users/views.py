@@ -7,7 +7,6 @@ from django.contrib import messages
 from .forms import RegisterUserForm, UpdateUserForm
 from django.utils.translation import gettext as _
 from task_manager.mixins import NoLogin
-from django.contrib.messages.views import SuccessMessageMixin
 
 
 # Create your views here.
@@ -18,9 +17,7 @@ class ListUsersView(ListView):
     context_object_name = 'users'
 
 
-class CreateUserView(View, SuccessMessageMixin):
-    success_message = _('User successfully registered')
-
+class CreateUserView(View):
     def get(self, request):
         return render(request, 'users/create_user.html')
 
@@ -40,12 +37,11 @@ class CreateUserView(View, SuccessMessageMixin):
         )
 
 
-class UpdateUserView(NoLogin, UpdateView, SuccessMessageMixin):
+class UpdateUserView(NoLogin, UpdateView):
     model = get_user_model()
     form_class = RegisterUserForm
     success_url = reverse_lazy("list_users")
     template_name = 'users/update_user.html'
-    success_message = _('User successfully updated')
 
     def get(self, request, pk):
         if pk != request.user.pk:
@@ -87,9 +83,7 @@ class UpdateUserView(NoLogin, UpdateView, SuccessMessageMixin):
         )
 
 
-class DeleteUserView(NoLogin, View, SuccessMessageMixin):
-    success_message = _('User successfully delete')
-
+class DeleteUserView(NoLogin, View):
     def get(self, request, pk):
         if request.user.pk != pk:
             messages.error(

@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from task_manager import views
+from task_manager.views import custom_404, custom_500
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='start_page'),
@@ -27,4 +28,8 @@ urlpatterns = [
     path('statuses/', include('task_manager.statuses.urls')),
     path('labels/', include('task_manager.labels.urls')),
     path('tasks/', include('task_manager.tasks.urls')),
+    path('test-500/', views.test_500_view),
 ]
+
+handler500 = custom_500
+handler404 = custom_404

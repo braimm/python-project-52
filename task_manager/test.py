@@ -1,14 +1,16 @@
 from django.test import TestCase
 from django.test import Client
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+from django.test import TestCase, override_settings
 
 
 class GetPagesTestCase(TestCase):
-    fixtures = []
+    fixtures = ['users.json', 'statuses.json', 'tasks.json', 'labels.json']
 
     def setUp(self):
         self.client = Client()
-        "Инициализация перед выполнением каждого теста"
+        self.user = get_user_model().objects.get(pk=1)
 
     def test_start_page(self):
         path = reverse_lazy('start_page')
@@ -16,12 +18,12 @@ class GetPagesTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'index.html')
 
-    def test_login(self):
-        response = self.client.post(
-            reverse_lazy("login"),
-            {"username": "123", "password": "123"}
+    def test_404_error(self):
+        response = self.client.get('/nonexistent/')
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(
+            response, template_name='errors/404.html'
         )
-        response.status_code
 
     def tearDown(self):
         "Действия после выполнения каждого теста"

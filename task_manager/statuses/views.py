@@ -29,6 +29,7 @@ class CreateStatusView(NoLogin, View, SuccessMessageMixin):
         form = CreateStatusForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, _('Status successfully created'))
             return HttpResponseRedirect(reverse("list_statuses"))
         return render(request, 'statuses/create_status.html')
 
@@ -56,4 +57,5 @@ class DeleteStatusView(NoLogin, View, SuccessMessageMixin):
             )
             return redirect('list_statuses')
         status.delete()
+        messages.success(request, _('Status successfully deleted'))
         return redirect('list_statuses')

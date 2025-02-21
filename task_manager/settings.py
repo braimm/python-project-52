@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 # DEBUG = os.getenv('DEBUG', False)
 
-ALLOWED_HOSTS = ['webserver', '127.0.0.1', 'localhost', 'onrender.com'] 
+ALLOWED_HOSTS = ['webserver', '127.0.0.1', 'localhost', 'python-project-52-szrx.onrender.com'] 
 
 
 # Application definition

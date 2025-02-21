@@ -20,14 +20,16 @@ class ListLabelsView(NoLogin, ListView):
     context_object_name = 'labels'
 
 
-class CreateLabelView(NoLogin, View):
+class CreateLabelView(NoLogin, View, SuccessMessageMixin):
+    success_message = _('Label successfully created')
+
     def get(self, request):
         return render(request, 'labels/create_label.html')
 
     def post(self, request):
         form = CreateLabelForm(request.POST)
         form.save()
-        messages.success(request, _('Label successfully created'))
+        # messages.success(request, _('Label successfully created'))
         return HttpResponseRedirect(reverse("list_labels"))
 
 
@@ -39,7 +41,9 @@ class UpdateLabelView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Label successfully updated')
 
 
-class DeleteLabelView(NoLogin, View):
+class DeleteLabelView(NoLogin, View, SuccessMessageMixin):
+    success_message = _('Label successfully deleted')
+
     def get(self, request, pk):
         return render(request, 'labels/delete_label.html')
 
@@ -52,5 +56,5 @@ class DeleteLabelView(NoLogin, View):
             )
             return redirect('list_labels')
         label.delete()
-        messages.success(request, _('Label successfully deleted'))
+        # messages.success(request, _('Label successfully deleted'))
         return redirect('list_labels')

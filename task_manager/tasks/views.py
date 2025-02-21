@@ -52,7 +52,8 @@ class UpdateTaskView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Task successfully updated')
 
 
-class DeleteTaskView(NoLogin, View):
+class DeleteTaskView(NoLogin, View, SuccessMessageMixin):
+    success_message = _('Task successfully deleted')
 
     def get(self, request, pk):
         task = Task.objects.get(pk=pk)
@@ -67,5 +68,5 @@ class DeleteTaskView(NoLogin, View):
     def post(self, request, pk):
         task = Task.objects.get(pk=pk)
         task.delete()
-        messages.success(request, _('Task successfully deleted'))
+        # messages.success(request, _('Task successfully deleted'))
         return redirect('list_tasks')

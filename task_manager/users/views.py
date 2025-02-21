@@ -7,6 +7,7 @@ from django.contrib import messages
 from .forms import RegisterUserForm, UpdateUserForm
 from django.utils.translation import gettext as _
 from task_manager.mixins import NoLogin
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 # Create your views here.
@@ -17,7 +18,8 @@ class ListUsersView(ListView):
     context_object_name = 'users'
 
 
-class CreateUserView(View):
+class CreateUserView(View, SuccessMessageMixin):
+    success_message = _('User successfully registered')
 
     def get(self, request):
         return render(request, 'users/create_user.html')
@@ -28,7 +30,7 @@ class CreateUserView(View):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password1'])
             user.save()
-            messages.success(request, _('User successfully registered'))
+            # messages.success(request, _('User successfully registered'))
             return redirect('login')
         username = request.POST.get('username')
         return render(
@@ -38,11 +40,12 @@ class CreateUserView(View):
         )
 
 
-class UpdateUserView(NoLogin, UpdateView):
+class UpdateUserView(NoLogin, UpdateView, SuccessMessageMixin):
     model = get_user_model()
     form_class = RegisterUserForm
     success_url = reverse_lazy("list_users")
     template_name = 'users/update_user.html'
+    success_message = _('User successfully updated')
 
     def get(self, request, pk):
         if pk != request.user.pk:
@@ -69,7 +72,7 @@ class UpdateUserView(NoLogin, UpdateView):
             user.username = form.cleaned_data['username']
             user.set_password(form.cleaned_data['password1'])
             user.save()
-            messages.success(request, _('User successfully updated'))
+            # messages.success(request, _('User successfully updated'))
             return redirect('list_users')
         if is_conflict_username:
             form.add_error(
@@ -84,7 +87,9 @@ class UpdateUserView(NoLogin, UpdateView):
         )
 
 
-class DeleteUserView(NoLogin, View):
+class DeleteUserView(NoLogin, View, SuccessMessageMixin):
+    success_message = _('User successfully delete')
+
     def get(self, request, pk):
         if request.user.pk != pk:
             messages.error(
@@ -103,5 +108,5 @@ class DeleteUserView(NoLogin, View):
             )
             return redirect('list_users')
         user.delete()
-        messages.success(request, _('User successfully delete'))
+        # messages.success(request, _('User successfully delete'))
         return redirect('list_users')

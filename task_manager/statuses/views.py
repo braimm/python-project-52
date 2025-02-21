@@ -19,7 +19,9 @@ class ListStatusesView(NoLogin, ListView):
     context_object_name = 'statuses'
 
 
-class CreateStatusView(NoLogin, View):
+class CreateStatusView(NoLogin, View, SuccessMessageMixin):
+    success_message = _('Status successfully created')
+
     def get(self, request):
         return render(request, 'statuses/create_status.html')
 
@@ -27,7 +29,7 @@ class CreateStatusView(NoLogin, View):
         form = CreateStatusForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Status successfully created'))
+            # messages.success(request, _('Status successfully created'))
             return HttpResponseRedirect(reverse("list_statuses"))
         return render(request, 'statuses/create_status.html')
 
@@ -40,7 +42,9 @@ class UpdateStatusView(NoLogin, SuccessMessageMixin, UpdateView):
     success_message = _('Status successfully updated')
 
 
-class DeleteStatusView(NoLogin, View):
+class DeleteStatusView(NoLogin, View, SuccessMessageMixin):
+    success_message = _('Status successfully deleted')
+
     def get(self, request, pk):
         return render(request, 'statuses/delete_status.html')
 
@@ -53,5 +57,5 @@ class DeleteStatusView(NoLogin, View):
             )
             return redirect('list_statuses')
         status.delete()
-        messages.success(request, _('Status successfully deleted'))
+        # messages.success(request, _('Status successfully deleted'))
         return redirect('list_statuses')
